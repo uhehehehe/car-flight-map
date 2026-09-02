@@ -426,12 +426,147 @@ async function initMap() {
 
 function startGPS() {
 
+    const statusElement =
+        document.getElementById("status");
+
+    statusElement.textContent =
+        "GPSを起動しています...";
+
+    // GPS対応チェック
     if (!navigator.geolocation) {
 
-        document.getElementById("status").textContent =
-            "このブラウザはGPSに対応していません";
+        statusElement.textContent =
+            "このiPhoneでは位置情報を取得できません";
 
         return;
+    }
+
+    // HTTPSチェック
+    if (location.protocol !== "https:") {
+
+        statusElement.textContent =
+            "HTTPS接続が必要です";
+
+        return;
+    }
+
+    statusElement.textContent =
+        "iPhoneから現在地を取得中...";
+
+
+    /*
+     * まず1回、現在位置を取得
+     * iPhone Safariではこちらを先に実行する
+     */
+
+    navigator.geolocation.getCurrentPosition(
+
+        position => {
+
+            console.log(
+                "GPS SUCCESS:",
+                position
+            );
+
+            currentPosition = {
+
+                lat: position.coords.latitude,
+
+                lng: position.coords.longitude
+
+            };
+
+
+            statusElement.textContent =
+                "現在地を取得しました";
+
+
+            // 現在地へ移動
+            map.setCenter(
+                currentPosition
+            );
+
+            map.setZoom(16);
+
+
+            // 車マーカー
+            updateCarPosition();
+
+
+            /*
+             * その後、GPSを継続監視
+             */
+
+            startGPSWatch();
+
+        },
+
+
+        error => {
+
+            console.error(
+                "GPS ERROR:",
+                error
+            );
+
+
+            let message =
+                "GPSエラー";
+
+
+            if (error.code === 1) {
+
+                message =
+                    "位置情報の使用が許可されていません";
+
+            } else if (error.code === 2) {
+
+                message =
+                    "現在地を取得できませんでした";
+
+            } else if (error.code === 3) {
+
+                message =
+                    "GPS取得がタイムアウトしました";
+
+            }
+
+
+            statusElement.textContent =
+                message +
+                "（エラーコード " +
+                error.code +
+                "）";
+
+
+        },
+
+        {
+
+            enableHighAccuracy: true,
+
+            timeout: 20000,
+
+            maximumAge: 0
+
+        }
+
+    );
+}
+
+
+/*
+ * GPSの継続監視
+ */
+
+function startGPSWatch() {
+
+    if (watchId !== null) {
+
+        navigator.geolocation.clearWatch(
+            watchId
+        );
+
     }
 
 
@@ -439,6 +574,13 @@ function startGPS() {
         navigator.geolocation.watchPosition(
 
             position => {
+
+                console.log(
+                    "GPS UPDATE:",
+                    position.coords.latitude,
+                    position.coords.longitude
+                );
+
 
                 currentPosition = {
 
@@ -449,30 +591,21 @@ function startGPS() {
                 };
 
 
+                document.getElementById(
+                    "status"
+                ).textContent =
+                    "GPS追跡中　精度 ±" +
+                    Math.round(
+                        position.coords.accuracy
+                    ) +
+                    "m";
+
+
                 updateCarPosition();
 
 
                 /*
-                 * GPSが初めて取得されたら
-                 * 現在地へ移動
-                 */
-
-                if (!window.firstGPS) {
-
-                    window.firstGPS = true;
-
-                    map.setCenter(
-                        currentPosition
-                    );
-
-                    map.setZoom(16);
-
-                }
-
-
-                /*
-                 * ルートが存在している場合、
-                 * 進捗を更新
+                 * ルートがあれば進捗更新
                  */
 
                 if (routeObject) {
@@ -486,26 +619,35 @@ function startGPS() {
 
             error => {
 
-                console.error(error);
+                console.error(
+                    "GPS WATCH ERROR:",
+                    error
+                );
 
-                document.getElementById("status").textContent =
-                    "GPSを取得できません。ブラウザの位置情報を許可してください。";
+
+                document.getElementById(
+                    "status"
+                ).textContent =
+                    "GPS更新エラー（コード " +
+                    error.code +
+                    "）";
 
             },
 
 
             {
+
                 enableHighAccuracy: true,
 
                 maximumAge: 2000,
 
-                timeout: 10000
+                timeout: 20000
 
             }
 
         );
-}
 
+}
 
 /* ==========================================================
    Car marker
@@ -1050,7 +1192,7 @@ YOUR_API_KEY
 -->
 
 <script
-    src="https://maps.googleapis.com/maps/api/js?AIzaSyAbRU5gNHyLMG8Givp5ZrblOzPaucztPMM&v=weekly&callback=initMap&libraries=marker"
+    src="https://maps.googleapis.com/maps/api/js?key=your_api_key&v=weekly&callback=initMap&libraries=marker"
     async
     defer>
 </script>
