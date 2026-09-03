@@ -13,448 +13,643 @@
 <title>CAR FLIGHT MONITOR</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    html,
-    body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: #05080d;
-        color: white;
-        font-family:
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            sans-serif;
-    }
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #05080d;
+    color: white;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
 
-    #app {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: row;
-        background: #05080d;
-    }
+#app {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: #05080d;
+}
 
-    /* =========================
-       MAP
-       ========================= */
+/* =========================================
+   MAP
+========================================= */
 
-    #map {
-        flex: 1;
-        height: 100%;
-        min-width: 0;
-        position: relative;
-    }
+#map {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
 
-    /* =========================
-       RIGHT PANEL
-       ========================= */
+/* =========================================
+   RIGHT INFORMATION PANEL
+========================================= */
+
+#panel {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 31%;
+    min-width: 300px;
+    max-width: 430px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(8,14,22,0.97),
+            rgba(5,9,15,0.97)
+        );
+
+    border-left: 1px solid #263242;
+
+    padding:
+        max(16px, env(safe-area-inset-top))
+        20px
+        max(16px, env(safe-area-inset-bottom))
+        20px;
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 10;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #91a2b7;
+}
+
+.live {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #63e6a5;
+    font-weight: 700;
+}
+
+.live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+
+    background: #63e6a5;
+
+    box-shadow:
+        0 0 8px #63e6a5;
+}
+
+/* =========================================
+   DESTINATION
+========================================= */
+
+.destination-label {
+    font-size: 9px;
+    color: #71849a;
+    letter-spacing: 2px;
+    margin-top: 5px;
+}
+
+#destinationDisplay {
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 700;
+    line-height: 1.15;
+
+    margin-top: 3px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.search-area {
+    display: flex;
+    gap: 7px;
+    margin-top: 10px;
+}
+
+#destinationInput {
+    flex: 1;
+    min-width: 0;
+
+    height: 40px;
+
+    border:
+        1px solid #344255;
+
+    border-radius: 6px;
+
+    background: #111925;
+
+    color: white;
+
+    padding:
+        0 11px;
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+#destinationInput:focus {
+    border-color: #71859e;
+}
+
+#routeButton {
+    height: 40px;
+
+    border: 0;
+
+    border-radius: 6px;
+
+    padding: 0 13px;
+
+    background: #e7edf5;
+    color: #111820;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+/* =========================================
+   ROUTE INFORMATION
+========================================= */
+
+.main-info {
+    margin-top: 17px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    border-top:
+        1px solid #202c3a;
+
+    border-bottom:
+        1px solid #202c3a;
+}
+
+.info-box {
+    padding: 13px 8px;
+}
+
+.info-box + .info-box {
+    border-left:
+        1px solid #202c3a;
+}
+
+.info-label {
+    font-size: 9px;
+    color: #71849a;
+    letter-spacing: 1.5px;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: clamp(23px, 3vw, 34px);
+    font-weight: 700;
+    line-height: 1;
+}
+
+.info-unit {
+    font-size: 11px;
+    color: #8b9bad;
+    margin-left: 3px;
+}
+
+/* =========================================
+   ETA
+========================================= */
+
+.eta {
+    margin-top: 13px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.eta-label {
+    font-size: 9px;
+    color: #71849a;
+    letter-spacing: 2px;
+}
+
+#etaValue {
+    font-size: clamp(27px, 3.5vw, 40px);
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* =========================================
+   PROGRESS
+========================================= */
+
+.progress-area {
+    margin-top: 15px;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+
+    font-size: 9px;
+
+    color: #71849a;
+
+    letter-spacing: 1px;
+}
+
+#progressPercent {
+    color: white;
+}
+
+.progress-track {
+    width: 100%;
+    height: 5px;
+
+    background: #273342;
+
+    border-radius: 10px;
+
+    margin-top: 7px;
+
+    overflow: hidden;
+}
+
+#progressBar {
+    width: 0%;
+    height: 100%;
+
+    background: #dfe8f2;
+
+    border-radius: 10px;
+
+    transition:
+        width 0.5s ease;
+}
+
+/* =========================================
+   STATUS
+========================================= */
+
+.status-area {
+    margin-top: auto;
+
+    border-top:
+        1px solid #202c3a;
+
+    padding-top: 12px;
+}
+
+#status {
+    font-size: 11px;
+
+    color: #a8b6c6;
+
+    min-height: 17px;
+
+    margin-bottom: 8px;
+
+    white-space: pre-line;
+}
+
+.gps-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+#gpsStatus {
+    font-size: 10px;
+    color: #63e6a5;
+}
+
+#gpsButton {
+    border:
+        1px solid #39495c;
+
+    background: #111925;
+
+    color: #dbe4ed;
+
+    border-radius: 5px;
+
+    padding:
+        7px 10px;
+
+    font-size: 10px;
+}
+
+/* =========================================
+   SCREEN INDICATOR
+========================================= */
+
+#screenIndicator {
+    position: absolute;
+
+    left: 18px;
+    bottom: 16px;
+
+    z-index: 20;
+
+    display: flex;
+    gap: 7px;
+
+    padding: 7px 10px;
+
+    background:
+        rgba(5,9,15,0.85);
+
+    border:
+        1px solid rgba(255,255,255,0.15);
+
+    border-radius: 20px;
+
+    backdrop-filter: blur(8px);
+}
+
+.screen-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #536273;
+
+    transition:
+        all 0.3s ease;
+}
+
+.screen-dot.active {
+    background: white;
+
+    box-shadow:
+        0 0 8px rgba(255,255,255,0.8);
+}
+
+/* =========================================
+   WEATHER SCREEN
+========================================= */
+
+#weatherScreen {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 30;
+
+    display: none;
+
+    background:
+        linear-gradient(
+            145deg,
+            #07111d,
+            #0b1622 45%,
+            #050a11
+        );
+
+    padding:
+        max(25px, env(safe-area-inset-top))
+        max(30px, env(safe-area-inset-right))
+        max(25px, env(safe-area-inset-bottom))
+        max(30px, env(safe-area-inset-left));
+}
+
+#weatherScreen.visible {
+    display: flex;
+
+    flex-direction: column;
+}
+
+.weather-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+}
+
+.weather-title {
+    font-size: 13px;
+
+    letter-spacing: 3px;
+
+    color: #91a2b7;
+
+    font-weight: 700;
+}
+
+.weather-destination {
+    font-size: clamp(28px, 5vw, 52px);
+
+    font-weight: 700;
+
+    margin-top: 7px;
+}
+
+.weather-updated {
+    font-size: 10px;
+
+    color: #71849a;
+
+    letter-spacing: 1px;
+
+    text-align: right;
+}
+
+.weather-main {
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: clamp(40px, 8vw, 120px);
+}
+
+.weather-icon {
+    font-size: clamp(70px, 12vw, 140px);
+}
+
+.weather-temp {
+    font-size: clamp(60px, 10vw, 120px);
+
+    font-weight: 300;
+
+    line-height: 1;
+}
+
+.weather-condition {
+    font-size: clamp(16px, 2vw, 25px);
+
+    color: #aebccc;
+
+    margin-top: 10px;
+}
+
+.weather-details {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(130px, 1fr));
+
+    gap: 1px;
+
+    background: #263242;
+
+    border:
+        1px solid #263242;
+}
+
+.weather-box {
+    background: #0a111a;
+
+    padding: 18px;
+
+    text-align: center;
+}
+
+.weather-box-label {
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    color: #71849a;
+
+    margin-bottom: 6px;
+}
+
+.weather-box-value {
+    font-size: clamp(20px, 3vw, 32px);
+
+    font-weight: 600;
+}
+
+/* =========================================
+   PORTRAIT
+========================================= */
+
+@media (orientation: portrait) {
 
     #panel {
-        width: 32%;
-        min-width: 300px;
-        max-width: 430px;
+        width: 100%;
+
+        top: auto;
+
+        height: 43%;
+
+        min-width: 0;
+        max-width: none;
+
+        border-left: 0;
+
+        border-top:
+            1px solid #263242;
+    }
+
+    #map {
         height: 100%;
-        background:
-            linear-gradient(
-                180deg,
-                #0b111a 0%,
-                #070b12 100%
-            );
+    }
 
-        border-left: 1px solid #263242;
-
-        padding:
-            max(16px, env(safe-area-inset-top))
-            20px
-            max(16px, env(safe-area-inset-bottom))
-            20px;
-
-        display: flex;
+    .weather-main {
         flex-direction: column;
 
-        overflow: hidden;
+        gap: 15px;
     }
 
-    /* =========================
-       HEADER
-       ========================= */
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        margin-bottom: 12px;
+    .weather-details {
+        grid-template-columns:
+            repeat(3, 1fr);
     }
+}
 
-    .title {
-        font-size: 15px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        color: #8ea1b8;
+/* =========================================
+   SMALL LANDSCAPE
+========================================= */
+
+@media
+(orientation: landscape)
+and (max-height: 500px) {
+
+    #panel {
+        width: 31%;
+
+        min-width: 270px;
+
+        padding-top: 9px;
+        padding-bottom: 9px;
     }
-
-    .live {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-
-        font-size: 11px;
-        letter-spacing: 1px;
-        color: #63e6a5;
-        font-weight: 700;
-    }
-
-    .live-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: #63e6a5;
-        box-shadow: 0 0 8px #63e6a5;
-    }
-
-    /* =========================
-       DESTINATION
-       ========================= */
 
     .destination-label {
-        font-size: 10px;
-        color: #72849a;
-        letter-spacing: 2px;
+        margin-top: 2px;
+    }
+
+    .search-area {
+        margin-top: 6px;
+    }
+
+    .main-info {
         margin-top: 8px;
     }
 
-    #destinationDisplay {
-        font-size: clamp(22px, 3vw, 34px);
-        font-weight: 700;
-        line-height: 1.15;
-
-        margin-top: 4px;
-
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    /* =========================
-       SEARCH
-       ========================= */
-
-    .search-area {
-        display: flex;
-        gap: 7px;
-        margin-top: 12px;
-    }
-
-    #destinationInput {
-        flex: 1;
-        min-width: 0;
-
-        height: 40px;
-
-        border: 1px solid #344255;
-        border-radius: 6px;
-
-        background: #111925;
-        color: white;
-
-        padding: 0 11px;
-
-        font-size: 14px;
-
-        outline: none;
-    }
-
-    #destinationInput:focus {
-        border-color: #6f829c;
-    }
-
-    #routeButton {
-        height: 40px;
-
-        border: 0;
-        border-radius: 6px;
-
-        padding: 0 13px;
-
-        background: #e7edf5;
-        color: #111820;
-
-        font-size: 13px;
-        font-weight: 700;
-
-        white-space: nowrap;
-    }
-
-    #routeButton:active {
-        transform: scale(0.97);
-    }
-
-    /* =========================
-       MAIN NUMBERS
-       ========================= */
-
-    .main-info {
-        margin-top: 18px;
-
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-
-        border-top: 1px solid #202c3a;
-        border-bottom: 1px solid #202c3a;
-    }
-
     .info-box {
-        padding: 14px 8px;
+        padding: 8px 6px;
     }
-
-    .info-box + .info-box {
-        border-left: 1px solid #202c3a;
-    }
-
-    .info-label {
-        font-size: 10px;
-        color: #71849a;
-        letter-spacing: 1.5px;
-        margin-bottom: 4px;
-    }
-
-    .info-value {
-        font-size: clamp(23px, 3vw, 34px);
-        font-weight: 700;
-        line-height: 1;
-    }
-
-    .info-unit {
-        font-size: 12px;
-        color: #8b9bad;
-        margin-left: 3px;
-        font-weight: 400;
-    }
-
-    /* =========================
-       ETA
-       ========================= */
 
     .eta {
-        margin-top: 14px;
-
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
+        margin-top: 7px;
     }
-
-    .eta-label {
-        font-size: 10px;
-        color: #71849a;
-        letter-spacing: 2px;
-    }
-
-    #etaValue {
-        font-size: clamp(27px, 3.5vw, 40px);
-        font-weight: 700;
-        letter-spacing: 1px;
-    }
-
-    /* =========================
-       PROGRESS
-       ========================= */
 
     .progress-area {
-        margin-top: 16px;
-    }
-
-    .progress-header {
-        display: flex;
-        justify-content: space-between;
-
-        font-size: 10px;
-        color: #71849a;
-        letter-spacing: 1px;
-    }
-
-    #progressPercent {
-        color: white;
-    }
-
-    .progress-track {
-        width: 100%;
-        height: 5px;
-
-        background: #273342;
-
-        border-radius: 10px;
-
         margin-top: 7px;
-
-        overflow: hidden;
     }
-
-    #progressBar {
-        width: 0%;
-        height: 100%;
-
-        background: #dfe8f2;
-
-        border-radius: 10px;
-
-        transition: width 0.5s ease;
-    }
-
-    /* =========================
-       GPS / STATUS
-       ========================= */
 
     .status-area {
-        margin-top: auto;
-
-        border-top: 1px solid #202c3a;
-
-        padding-top: 12px;
+        padding-top: 7px;
     }
-
-    #status {
-        font-size: 12px;
-        color: #a8b6c6;
-
-        min-height: 17px;
-
-        margin-bottom: 8px;
-    }
-
-    .gps-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    #gpsStatus {
-        font-size: 11px;
-        color: #63e6a5;
-    }
-
-    #gpsButton {
-        border: 1px solid #39495c;
-        background: #111925;
-        color: #dbe4ed;
-
-        border-radius: 5px;
-
-        padding: 7px 10px;
-
-        font-size: 11px;
-    }
-
-    #gpsButton:active {
-        transform: scale(0.97);
-    }
-
-    /* =========================
-       MOBILE PORTRAIT
-       ========================= */
-
-    @media (orientation: portrait) {
-
-        #app {
-            flex-direction: column;
-        }
-
-        #map {
-            height: 58%;
-            flex: none;
-        }
-
-        #panel {
-            width: 100%;
-            max-width: none;
-            min-width: 0;
-
-            height: 42%;
-
-            border-left: 0;
-            border-top: 1px solid #263242;
-
-            padding:
-                10px
-                14px
-                max(10px, env(safe-area-inset-bottom))
-                14px;
-
-            overflow-y: auto;
-        }
-
-        .main-info {
-            margin-top: 10px;
-        }
-
-        .info-box {
-            padding: 9px 6px;
-        }
-
-        .eta {
-            margin-top: 8px;
-        }
-
-        .progress-area {
-            margin-top: 9px;
-        }
-
-        .status-area {
-            margin-top: 10px;
-        }
-    }
-
-    /* =========================
-       SMALL LANDSCAPE
-       ========================= */
-
-    @media (orientation: landscape) and (max-height: 500px) {
-
-        #panel {
-            width: 31%;
-            min-width: 270px;
-
-            padding-top: 10px;
-            padding-bottom: 10px;
-        }
-
-        .destination-label {
-            margin-top: 2px;
-        }
-
-        .search-area {
-            margin-top: 7px;
-        }
-
-        .main-info {
-            margin-top: 9px;
-        }
-
-        .info-box {
-            padding: 9px 6px;
-        }
-
-        .eta {
-            margin-top: 8px;
-        }
-
-        .progress-area {
-            margin-top: 8px;
-        }
-
-        .status-area {
-            padding-top: 8px;
-        }
-    }
+}
 </style>
 </head>
+
 
 <body>
 
@@ -463,10 +658,12 @@
     <!-- MAP -->
     <div id="map"></div>
 
-    <!-- INFORMATION PANEL -->
+
+    <!-- RIGHT PANEL -->
     <div id="panel">
 
         <div class="header">
+
             <div class="title">
                 CAR FLIGHT MONITOR
             </div>
@@ -475,15 +672,19 @@
                 <span class="live-dot"></span>
                 LIVE
             </div>
+
         </div>
+
 
         <div class="destination-label">
             DESTINATION
         </div>
 
+
         <div id="destinationDisplay">
             ---
         </div>
+
 
         <div class="search-area">
 
@@ -500,6 +701,7 @@
 
         </div>
 
+
         <div class="main-info">
 
             <div class="info-box">
@@ -508,12 +710,20 @@
                     REMAINING
                 </div>
 
-                <div>
-                    <span id="distanceValue">---</span>
-                    <span class="info-unit">km</span>
+                <div class="info-value">
+
+                    <span id="distanceValue">
+                        ---
+                    </span>
+
+                    <span class="info-unit">
+                        km
+                    </span>
+
                 </div>
 
             </div>
+
 
             <div class="info-box">
 
@@ -521,21 +731,31 @@
                     TIME
                 </div>
 
-                <div>
-                    <span id="timeValue">---</span>
-                    <span class="info-unit">min</span>
+                <div class="info-value">
+
+                    <span id="timeValue">
+                        ---
+                    </span>
+
+                    <span class="info-unit">
+                        min
+                    </span>
+
                 </div>
 
             </div>
 
         </div>
 
+
         <div class="eta">
 
             <div>
+
                 <div class="eta-label">
                     ESTIMATED ARRIVAL
                 </div>
+
             </div>
 
             <div id="etaValue">
@@ -543,6 +763,7 @@
             </div>
 
         </div>
+
 
         <div class="progress-area">
 
@@ -558,11 +779,15 @@
 
             </div>
 
+
             <div class="progress-track">
+
                 <div id="progressBar"></div>
+
             </div>
 
         </div>
+
 
         <div class="status-area">
 
@@ -570,11 +795,13 @@
                 目的地を入力してください
             </div>
 
+
             <div class="gps-row">
 
                 <div id="gpsStatus">
                     GPS待機中
                 </div>
+
 
                 <button id="gpsButton">
                     GPS START
@@ -586,10 +813,146 @@
 
     </div>
 
+
+    <!-- SCREEN INDICATOR -->
+
+    <div id="screenIndicator">
+
+        <div
+            class="screen-dot active"
+            id="dot0">
+        </div>
+
+        <div
+            class="screen-dot"
+            id="dot1">
+        </div>
+
+        <div
+            class="screen-dot"
+            id="dot2">
+        </div>
+
+    </div>
+
+
+    <!-- WEATHER SCREEN -->
+
+    <div id="weatherScreen">
+
+        <div class="weather-top">
+
+            <div>
+
+                <div class="weather-title">
+                    DESTINATION WEATHER
+                </div>
+
+                <div
+                    class="weather-destination"
+                    id="weatherDestination">
+                    ---
+                </div>
+
+            </div>
+
+
+            <div
+                class="weather-updated"
+                id="weatherUpdated">
+                WEATHER
+            </div>
+
+        </div>
+
+
+        <div class="weather-main">
+
+            <div
+                class="weather-icon"
+                id="weatherIcon">
+                ☁️
+            </div>
+
+
+            <div>
+
+                <div
+                    class="weather-temp"
+                    id="weatherTemp">
+                    --
+                </div>
+
+
+                <div
+                    class="weather-condition"
+                    id="weatherCondition">
+                    天気情報を取得中
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="weather-details">
+
+            <div class="weather-box">
+
+                <div class="weather-box-label">
+                    FEELS LIKE
+                </div>
+
+                <div
+                    class="weather-box-value"
+                    id="weatherFeels">
+                    --
+                </div>
+
+            </div>
+
+
+            <div class="weather-box">
+
+                <div class="weather-box-label">
+                    HUMIDITY
+                </div>
+
+                <div
+                    class="weather-box-value"
+                    id="weatherHumidity">
+                    --
+                </div>
+
+            </div>
+
+
+            <div class="weather-box">
+
+                <div class="weather-box-label">
+                    WIND
+                </div>
+
+                <div
+                    class="weather-box-value"
+                    id="weatherWind">
+                    --
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 
 <script>
+
+/* =====================================================
+   GLOBAL VARIABLES
+===================================================== */
 
 let map;
 
@@ -609,12 +972,41 @@ let lastRouteUpdatePosition = null;
 
 let gpsWatchId = null;
 
-let firstRoute = true;
+
+/*
+ * 0 = 全体ルート
+ * 1 = 現在位置拡大
+ * 2 = 天気
+ */
+
+let currentScreen = 0;
 
 
-/* ========================================
-   MAP INITIALIZATION
-   ======================================== */
+/*
+ * 10秒ごとに切り替え
+ */
+
+const SCREEN_INTERVAL = 10000;
+
+
+/*
+ * 画面切り替えタイマー
+ */
+
+let screenTimer = null;
+
+
+/*
+ * 全体ルートを表示するための
+ * viewportを保存
+ */
+
+let routeViewport = null;
+
+
+/* =====================================================
+   INITIALIZE MAP
+===================================================== */
 
 async function initMap() {
 
@@ -623,12 +1015,13 @@ async function initMap() {
         const { Map } =
             await google.maps.importLibrary("maps");
 
-        const { AdvancedMarkerElement } =
-            await google.maps.importLibrary("marker");
+        await google.maps.importLibrary("marker");
+
 
         map = new Map(
             document.getElementById("map"),
             {
+
                 center: {
                     lat: 35.681236,
                     lng: 139.767125
@@ -641,13 +1034,24 @@ async function initMap() {
                 disableDefaultUI: true,
 
                 gestureHandling: "greedy"
+
             }
         );
+
 
         document.getElementById("status").textContent =
             "GPSを取得しています…";
 
+
         startGPS();
+
+
+        /*
+         * 10秒ごとの画面切り替え
+         */
+
+        startScreenTimer();
+
 
     } catch (error) {
 
@@ -657,12 +1061,210 @@ async function initMap() {
             "Google Mapsの初期化に失敗しました。";
 
     }
+
 }
 
 
-/* ========================================
+/* =====================================================
+   SCREEN TIMER
+===================================================== */
+
+function startScreenTimer() {
+
+    if (screenTimer) {
+
+        clearInterval(screenTimer);
+
+    }
+
+
+    screenTimer =
+        setInterval(
+            () => {
+
+                switchToNextScreen();
+
+            },
+            SCREEN_INTERVAL
+        );
+
+}
+
+
+/* =====================================================
+   SWITCH SCREEN
+===================================================== */
+
+function switchToNextScreen() {
+
+    /*
+     * 目的地がまだ設定されていない場合は
+     * 天気画面を飛ばす
+     */
+
+    if (!destination) {
+
+        currentScreen = 0;
+
+    } else {
+
+        currentScreen++;
+
+        if (currentScreen > 2) {
+
+            currentScreen = 0;
+
+        }
+
+    }
+
+
+    showScreen(currentScreen);
+
+}
+
+
+/* =====================================================
+   SHOW SCREEN
+===================================================== */
+
+function showScreen(screen) {
+
+    currentScreen = screen;
+
+
+    /*
+     * インジケーター
+     */
+
+    document
+        .querySelectorAll(".screen-dot")
+        .forEach(
+            dot => {
+
+                dot.classList.remove("active");
+
+            }
+        );
+
+
+    const activeDot =
+        document.getElementById(
+            "dot" + screen
+        );
+
+
+    if (activeDot) {
+
+        activeDot.classList.add("active");
+
+    }
+
+
+    /*
+     * WEATHER SCREEN
+     */
+
+    const weatherScreen =
+        document.getElementById(
+            "weatherScreen"
+        );
+
+
+    if (screen === 2 && destination) {
+
+        /*
+         * 地図を隠して天気画面
+         */
+
+        weatherScreen.classList.add(
+            "visible"
+        );
+
+
+        /*
+         * 天気取得
+         */
+
+        loadWeather();
+
+
+        return;
+
+    }
+
+
+    /*
+     * 通常画面では天気画面を隠す
+     */
+
+    weatherScreen.classList.remove(
+        "visible"
+    );
+
+
+    if (!map) {
+        return;
+    }
+
+
+    /*
+     * SCREEN 0
+     * 全体ルート
+     */
+
+    if (screen === 0) {
+
+        if (routeViewport) {
+
+            map.fitBounds(
+                routeViewport,
+                {
+                    top: 40,
+                    right: 40,
+                    bottom: 40,
+                    left: 40
+                }
+            );
+
+        } else if (currentPosition) {
+
+            map.setCenter(
+                currentPosition
+            );
+
+            map.setZoom(12);
+
+        }
+
+    }
+
+
+    /*
+     * SCREEN 1
+     * 現在位置拡大
+     */
+
+    if (screen === 1) {
+
+        if (currentPosition) {
+
+            map.setCenter(
+                currentPosition
+            );
+
+            map.setZoom(17);
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
    GPS
-   ======================================== */
+===================================================== */
 
 function startGPS() {
 
@@ -672,7 +1274,9 @@ function startGPS() {
             "GPS非対応";
 
         return;
+
     }
+
 
     document.getElementById("gpsStatus").textContent =
         "GPS取得中…";
@@ -701,24 +1305,34 @@ function startGPS() {
         },
 
         {
+
             enableHighAccuracy: true,
+
             maximumAge: 0,
+
             timeout: 15000
+
         }
 
     );
+
 }
 
 
-/* ========================================
-   GPS WATCH
-   ======================================== */
+/* =====================================================
+   WATCH GPS
+===================================================== */
 
 function watchGPS() {
 
     if (gpsWatchId !== null) {
-        navigator.geolocation.clearWatch(gpsWatchId);
+
+        navigator.geolocation.clearWatch(
+            gpsWatchId
+        );
+
     }
+
 
     gpsWatchId =
         navigator.geolocation.watchPosition(
@@ -739,18 +1353,23 @@ function watchGPS() {
             },
 
             {
+
                 enableHighAccuracy: true,
+
                 maximumAge: 1000,
+
                 timeout: 15000
+
             }
 
         );
+
 }
 
 
-/* ========================================
+/* =====================================================
    UPDATE GPS
-   ======================================== */
+===================================================== */
 
 function updateGPS(position) {
 
@@ -763,9 +1382,12 @@ function updateGPS(position) {
     const accuracy =
         position.coords.accuracy;
 
+
     currentPosition = {
+
         lat,
         lng
+
     };
 
 
@@ -779,8 +1401,25 @@ function updateGPS(position) {
 
 
     /*
-     * 目的地が設定されている場合、
-     * 150m以上移動したらルートを更新
+     * 現在位置画面なら
+     * 常に車を中央付近にする
+     */
+
+    if (
+        currentScreen === 1 &&
+        map
+    ) {
+
+        map.setCenter(
+            currentPosition
+        );
+
+    }
+
+
+    /*
+     * 150m以上移動したら
+     * ルート再計算
      */
 
     if (
@@ -794,6 +1433,7 @@ function updateGPS(position) {
                 lastRouteUpdatePosition
             );
 
+
         if (moved >= 150) {
 
             calculateRoute(false);
@@ -801,37 +1441,55 @@ function updateGPS(position) {
         }
 
     }
+
 }
 
 
-/* ========================================
+/* =====================================================
    CAR MARKER
-   ======================================== */
+===================================================== */
 
 function updateCarMarker() {
 
-    if (!map || !currentPosition) {
+    if (
+        !map ||
+        !currentPosition
+    ) {
+
         return;
+
     }
+
 
     if (!carMarker) {
 
         const carElement =
             document.createElement("div");
 
-        carElement.innerHTML = "🚗";
 
-        carElement.style.fontSize = "30px";
+        carElement.innerHTML =
+            "🚗";
+
+
+        carElement.style.fontSize =
+            "30px";
+
 
         carElement.style.filter =
-            "drop-shadow(0 2px 4px rgba(0,0,0,.7))";
+            "drop-shadow(0 2px 4px rgba(0,0,0,.8))";
+
 
         carMarker =
             new google.maps.marker.AdvancedMarkerElement({
+
                 map: map,
+
                 position: currentPosition,
+
                 content: carElement,
+
                 title: "現在地"
+
             });
 
     } else {
@@ -840,12 +1498,13 @@ function updateCarMarker() {
             currentPosition;
 
     }
+
 }
 
 
-/* ========================================
-   ROUTE BUTTON
-   ======================================== */
+/* =====================================================
+   ROUTE INPUT
+===================================================== */
 
 document
     .getElementById("routeButton")
@@ -861,7 +1520,9 @@ document
         "keydown",
         event => {
 
-            if (event.key === "Enter") {
+            if (
+                event.key === "Enter"
+            ) {
 
                 calculateRouteFromInput();
 
@@ -871,9 +1532,9 @@ document
     );
 
 
-/* ========================================
-   SEARCH DESTINATION
-   ======================================== */
+/* =====================================================
+   DESTINATION SEARCH
+===================================================== */
 
 async function calculateRouteFromInput() {
 
@@ -883,20 +1544,24 @@ async function calculateRouteFromInput() {
             .value
             .trim();
 
+
     if (!input) {
 
         document.getElementById("status").textContent =
             "目的地を入力してください。";
 
         return;
+
     }
+
 
     if (!currentPosition) {
 
         document.getElementById("status").textContent =
-            "GPS位置を取得中です。少し待ってください。";
+            "GPS位置を取得中です。";
 
         return;
+
     }
 
 
@@ -906,18 +1571,18 @@ async function calculateRouteFromInput() {
 
     try {
 
-        /*
-         * Geocoderで住所・施設名を座標に変換
-         */
-
         const geocoder =
             new google.maps.Geocoder();
 
 
         geocoder.geocode(
+
             {
+
                 address: input,
+
                 region: "JP"
+
             },
 
             results => {
@@ -931,36 +1596,54 @@ async function calculateRouteFromInput() {
                         "目的地が見つかりませんでした。";
 
                     return;
+
                 }
 
 
                 const location =
-                    results[0].geometry.location;
+                    results[0]
+                        .geometry
+                        .location;
 
 
                 destination = {
 
-                    lat: location.lat(),
-                    lng: location.lng(),
+                    lat:
+                        location.lat(),
+
+                    lng:
+                        location.lng(),
 
                     name:
-                        results[0].formatted_address
+                        results[0]
+                            .formatted_address
 
                 };
 
 
                 document.getElementById(
                     "destinationDisplay"
-                ).textContent = input;
+                ).textContent =
+                    input;
 
 
-                initialRouteDistance = null;
+                document.getElementById(
+                    "weatherDestination"
+                ).textContent =
+                    input;
 
-                firstRoute = true;
+
+                initialRouteDistance =
+                    null;
+
+
+                currentScreen = 0;
+
 
                 calculateRoute(true);
 
             }
+
         );
 
     } catch (error) {
@@ -971,12 +1654,13 @@ async function calculateRouteFromInput() {
             "目的地の検索に失敗しました。";
 
     }
+
 }
 
 
-/* ========================================
+/* =====================================================
    CALCULATE ROUTE
-   ======================================== */
+===================================================== */
 
 async function calculateRoute(fitMap) {
 
@@ -984,41 +1668,57 @@ async function calculateRoute(fitMap) {
         !currentPosition ||
         !destination
     ) {
+
         return;
+
     }
 
 
     try {
 
         const { Route } =
-            await google.maps.importLibrary("routes");
+            await google.maps.importLibrary(
+                "routes"
+            );
 
 
         const request = {
 
-            origin: currentPosition,
+            origin:
+                currentPosition,
 
-            destination: destination,
+            destination:
+                destination,
 
-            travelMode: "DRIVING",
+            travelMode:
+                "DRIVING",
 
             routingPreference:
                 "TRAFFIC_AWARE",
 
             fields: [
+
                 "path",
+
                 "viewport",
+
                 "distanceMeters",
+
                 "durationMillis",
+
                 "localizedValues",
+
                 "legs"
+
             ]
 
         };
 
 
         const response =
-            await Route.computeRoutes(request);
+            await Route.computeRoutes(
+                request
+            );
 
 
         if (
@@ -1031,6 +1731,7 @@ async function calculateRoute(fitMap) {
                 "ルートを取得できませんでした。";
 
             return;
+
         }
 
 
@@ -1039,7 +1740,7 @@ async function calculateRoute(fitMap) {
 
 
         /*
-         * 初回のルート距離を保存
+         * 初回の総距離
          */
 
         if (
@@ -1053,23 +1754,40 @@ async function calculateRoute(fitMap) {
 
 
         /*
-         * ルート描画
+         * 全体表示用viewport
+         */
+
+        routeViewport =
+            routeObject.viewport;
+
+
+        /*
+         * 古いルートを削除
          */
 
         clearRoute();
 
 
+        /*
+         * 新しいルート
+         */
+
         routePolylines =
             routeObject.createPolylines({
+
                 polylineOptions: {
 
-                    strokeColor: "#4285F4",
+                    strokeColor:
+                        "#4285F4",
 
-                    strokeOpacity: 0.9,
+                    strokeOpacity:
+                        0.9,
 
-                    strokeWeight: 6
+                    strokeWeight:
+                        6
 
                 }
+
             });
 
 
@@ -1083,36 +1801,38 @@ async function calculateRoute(fitMap) {
 
 
         /*
-         * 地図を初回だけルート全体に合わせる
+         * 初回のみ全体表示
          */
 
-        if (fitMap && routeObject.viewport) {
+        if (
+            fitMap &&
+            routeViewport
+        ) {
 
             map.fitBounds(
-                routeObject.viewport,
+                routeViewport,
                 {
+
                     top: 40,
+
                     right: 40,
+
                     bottom: 40,
+
                     left: 40
+
                 }
             );
 
         }
 
 
-        /*
-         * 最新GPS位置を記録
-         */
-
         lastRouteUpdatePosition = {
+
             ...currentPosition
+
         };
 
-
-        /*
-         * 情報更新
-         */
 
         updateRouteInformation();
 
@@ -1130,12 +1850,13 @@ async function calculateRoute(fitMap) {
             error.message;
 
     }
+
 }
 
 
-/* ========================================
+/* =====================================================
    CLEAR ROUTE
-   ======================================== */
+===================================================== */
 
 function clearRoute() {
 
@@ -1147,32 +1868,32 @@ function clearRoute() {
         }
     );
 
+
     routePolylines = [];
 
 }
 
 
-/* ========================================
+/* =====================================================
    ROUTE INFORMATION
-   ======================================== */
+===================================================== */
 
 function updateRouteInformation() {
 
     if (!routeObject) {
+
         return;
+
     }
 
 
     const distanceMeters =
         routeObject.distanceMeters || 0;
 
+
     const durationMillis =
         routeObject.durationMillis || 0;
 
-
-    /*
-     * km
-     */
 
     const distanceKm =
         distanceMeters / 1000;
@@ -1184,15 +1905,13 @@ function updateRouteInformation() {
         distanceKm.toFixed(1);
 
 
-    /*
-     * minutes
-     */
-
     const minutes =
         Math.max(
             0,
+
             Math.round(
-                durationMillis / 60000
+                durationMillis /
+                60000
             )
         );
 
@@ -1209,20 +1928,27 @@ function updateRouteInformation() {
 
     const eta =
         new Date(
-            Date.now() + durationMillis
+            Date.now() +
+            durationMillis
         );
 
 
     const hours =
         String(
             eta.getHours()
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     const mins =
         String(
             eta.getMinutes()
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     document.getElementById(
@@ -1232,7 +1958,7 @@ function updateRouteInformation() {
 
 
     /*
-     * progress
+     * 進捗
      */
 
     if (
@@ -1280,27 +2006,43 @@ function updateRouteInformation() {
 }
 
 
-/* ========================================
-   DISTANCE BETWEEN GPS POINTS
-   ======================================== */
+/* =====================================================
+   DISTANCE
+===================================================== */
 
 function distanceBetween(a, b) {
 
     const R = 6371000;
 
+
     const lat1 =
-        a.lat * Math.PI / 180;
+        a.lat *
+        Math.PI /
+        180;
+
 
     const lat2 =
-        b.lat * Math.PI / 180;
+        b.lat *
+        Math.PI /
+        180;
+
 
     const dLat =
-        (b.lat - a.lat) *
-        Math.PI / 180;
+        (
+            b.lat -
+            a.lat
+        ) *
+        Math.PI /
+        180;
+
 
     const dLng =
-        (b.lng - a.lng) *
-        Math.PI / 180;
+        (
+            b.lng -
+            a.lng
+        ) *
+        Math.PI /
+        180;
 
 
     const x =
@@ -1327,9 +2069,316 @@ function distanceBetween(a, b) {
 }
 
 
-/* ========================================
+/* =====================================================
+   WEATHER
+===================================================== */
+
+async function loadWeather() {
+
+    if (!destination) {
+
+        return;
+
+    }
+
+
+    try {
+
+        /*
+         * Open-Meteo
+         * APIキー不要
+         */
+
+        const url =
+            "https://api.open-meteo.com/v1/forecast" +
+            "?latitude=" +
+            encodeURIComponent(
+                destination.lat
+            ) +
+            "&longitude=" +
+            encodeURIComponent(
+                destination.lng
+            ) +
+            "&current=" +
+            "temperature_2m," +
+            "relative_humidity_2m," +
+            "apparent_temperature," +
+            "weather_code," +
+            "wind_speed_10m" +
+            "&timezone=auto";
+
+
+        const response =
+            await fetch(url);
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Weather API error"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !data.current
+        ) {
+
+            throw new Error(
+                "Weather data unavailable"
+            );
+
+        }
+
+
+        const weather =
+            data.current;
+
+
+        /*
+         * 気温
+         */
+
+        document.getElementById(
+            "weatherTemp"
+        ).textContent =
+            Math.round(
+                weather.temperature_2m
+            ) +
+            "°";
+
+
+        /*
+         * 体感温度
+         */
+
+        document.getElementById(
+            "weatherFeels"
+        ).textContent =
+            Math.round(
+                weather.apparent_temperature
+            ) +
+            "°";
+
+
+        /*
+         * 湿度
+         */
+
+        document.getElementById(
+            "weatherHumidity"
+        ).textContent =
+            Math.round(
+                weather.relative_humidity_2m
+            ) +
+            "%";
+
+
+        /*
+         * 風速
+         */
+
+        document.getElementById(
+            "weatherWind"
+        ).textContent =
+            Math.round(
+                weather.wind_speed_10m
+            ) +
+            " km/h";
+
+
+        /*
+         * 天気コード
+         */
+
+        const weatherInfo =
+            getWeatherInfo(
+                weather.weather_code
+            );
+
+
+        document.getElementById(
+            "weatherIcon"
+        ).textContent =
+            weatherInfo.icon;
+
+
+        document.getElementById(
+            "weatherCondition"
+        ).textContent =
+            weatherInfo.text;
+
+
+        /*
+         * 更新時刻
+         */
+
+        const updateTime =
+            new Date();
+
+
+        document.getElementById(
+            "weatherUpdated"
+        ).textContent =
+            "UPDATED " +
+            String(
+                updateTime.getHours()
+            ).padStart(2, "0") +
+            ":" +
+            String(
+                updateTime.getMinutes()
+            ).padStart(2, "0");
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "weatherCondition"
+        ).textContent =
+            "天気情報を取得できませんでした";
+
+    }
+
+}
+
+
+/* =====================================================
+   WEATHER CODE
+===================================================== */
+
+function getWeatherInfo(code) {
+
+    if (code === 0) {
+
+        return {
+            icon: "☀️",
+            text: "快晴"
+        };
+
+    }
+
+
+    if (
+        code === 1 ||
+        code === 2
+    ) {
+
+        return {
+            icon: "🌤️",
+            text: "晴れ・一部曇り"
+        };
+
+    }
+
+
+    if (code === 3) {
+
+        return {
+            icon: "☁️",
+            text: "曇り"
+        };
+
+    }
+
+
+    if (
+        code === 45 ||
+        code === 48
+    ) {
+
+        return {
+            icon: "🌫️",
+            text: "霧"
+        };
+
+    }
+
+
+    if (
+        code >= 51 &&
+        code <= 57
+    ) {
+
+        return {
+            icon: "🌦️",
+            text: "霧雨"
+        };
+
+    }
+
+
+    if (
+        code >= 61 &&
+        code <= 67
+    ) {
+
+        return {
+            icon: "🌧️",
+            text: "雨"
+        };
+
+    }
+
+
+    if (
+        code >= 71 &&
+        code <= 77
+    ) {
+
+        return {
+            icon: "🌨️",
+            text: "雪"
+        };
+
+    }
+
+
+    if (
+        code >= 80 &&
+        code <= 82
+    ) {
+
+        return {
+            icon: "🌧️",
+            text: "にわか雨"
+        };
+
+    }
+
+
+    if (
+        code >= 95 &&
+        code <= 99
+    ) {
+
+        return {
+            icon: "⛈️",
+            text: "雷雨"
+        };
+
+    }
+
+
+    return {
+
+        icon: "☁️",
+
+        text: "天気情報"
+
+    };
+
+}
+
+
+/* =====================================================
    GPS BUTTON
-   ======================================== */
+===================================================== */
 
 document
     .getElementById("gpsButton")
@@ -1342,11 +2391,15 @@ document
                 map
             ) {
 
+                currentScreen = 1;
+
+                showScreen(1);
+
                 map.setCenter(
                     currentPosition
                 );
 
-                map.setZoom(16);
+                map.setZoom(17);
 
             } else {
 
@@ -1358,11 +2411,12 @@ document
     );
 
 
-/* ========================================
+/* =====================================================
    PERIODIC ROUTE UPDATE
-   ======================================== */
+===================================================== */
 
 setInterval(
+
     () => {
 
         if (
@@ -1375,22 +2429,19 @@ setInterval(
         }
 
     },
+
     30000
+
 );
 
 </script>
 
 
-<!--
-=========================================================
- Google Maps API
-=========================================================
+<!-- =====================================================
+     GOOGLE MAPS API
 
-↓ ここだけ、自分のAPIキーを入れてください。
-
-現在使っているAPIキーをそのまま使用してください。
-このチャットにはAPIキーを貼らないでください。
--->
+     ↓ YOUR_API_KEY を自分のAPIキーに変更
+===================================================== -->
 
 <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbRU5gNHyLMG8Givp5ZrblOzPaucztPMM&v=weekly&callback=initMap"
