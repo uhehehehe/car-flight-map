@@ -564,6 +564,215 @@ body {
     font-weight: 600;
 }
 
+
+/* =========================================
+   NAVIGATION HUD
+========================================= */
+
+#navigationHUD {
+    position: absolute;
+    inset: 0;
+    z-index: 25;
+    display: none;
+    pointer-events: none;
+    color: #8dffcf;
+    font-family:
+        "SFMono-Regular",
+        "Roboto Mono",
+        Consolas,
+        monospace;
+    text-shadow: 0 0 8px rgba(99,230,165,0.55);
+}
+
+#navigationHUD.visible {
+    display: block;
+}
+
+.hud-scanlines {
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(99,230,165,0.018) 0px,
+            rgba(99,230,165,0.018) 1px,
+            transparent 1px,
+            transparent 4px
+        );
+    opacity: 0.55;
+}
+
+.hud-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(560px, 72vw);
+    text-align: center;
+}
+
+.hud-crosshair {
+    position: relative;
+    width: 150px;
+    height: 90px;
+    margin: 0 auto 6px;
+}
+
+.hud-crosshair::before,
+.hud-crosshair::after {
+    content: "";
+    position: absolute;
+    background: rgba(141,255,207,0.85);
+    box-shadow: 0 0 8px rgba(99,230,165,0.45);
+}
+
+.hud-crosshair::before {
+    width: 2px;
+    height: 54px;
+    left: 50%;
+    top: 18px;
+    transform: translateX(-50%);
+}
+
+.hud-crosshair::after {
+    width: 70px;
+    height: 2px;
+    left: 50%;
+    top: 45px;
+    transform: translateX(-50%);
+}
+
+.hud-car-symbol {
+    position: absolute;
+    left: 50%;
+    top: 34px;
+    transform: translate(-50%, -50%);
+    font-size: 27px;
+    filter: drop-shadow(0 0 7px rgba(99,230,165,0.65));
+}
+
+#hudManeuver {
+    font-size: clamp(25px, 4vw, 48px);
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+#hudNextDistance {
+    margin-top: 7px;
+    font-size: clamp(12px, 1.8vw, 18px);
+    letter-spacing: 2px;
+}
+
+.hud-top {
+    position: absolute;
+    top: max(22px, env(safe-area-inset-top));
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.hud-heading {
+    font-size: clamp(26px, 4vw, 48px);
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.hud-heading-label {
+    margin-top: 2px;
+    font-size: 9px;
+    letter-spacing: 3px;
+    opacity: 0.72;
+}
+
+.hud-bottom-left,
+.hud-bottom-right {
+    position: absolute;
+    bottom: max(25px, env(safe-area-inset-bottom));
+}
+
+.hud-bottom-left {
+    left: max(25px, env(safe-area-inset-left));
+    text-align: left;
+}
+
+.hud-bottom-right {
+    right: max(25px, env(safe-area-inset-right));
+    text-align: right;
+}
+
+.hud-small-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    margin-bottom: 3px;
+}
+
+.hud-speed {
+    font-size: clamp(27px, 4.5vw, 54px);
+    font-weight: 700;
+}
+
+.hud-speed-unit {
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.hud-remaining {
+    font-size: clamp(25px, 4vw, 48px);
+    font-weight: 700;
+}
+
+.hud-destination {
+    margin-top: 3px;
+    max-width: 280px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hud-reticle {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 260px;
+    height: 150px;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgba(141,255,207,0.22);
+    border-radius: 50%;
+}
+
+.hud-reticle::before,
+.hud-reticle::after {
+    content: "";
+    position: absolute;
+    background: rgba(141,255,207,0.5);
+}
+
+.hud-reticle::before {
+    width: 1px;
+    height: 100%;
+    left: 50%;
+}
+
+.hud-reticle::after {
+    width: 100%;
+    height: 1px;
+    top: 50%;
+}
+
+@media (orientation: portrait) {
+    .hud-center {
+        width: 90vw;
+    }
+
+    .hud-reticle {
+        width: 220px;
+        height: 130px;
+    }
+}
+
 /* =========================================
    PORTRAIT
 ========================================= */
@@ -833,6 +1042,11 @@ and (max-height: 500px) {
             id="dot2">
         </div>
 
+        <div
+            class="screen-dot"
+            id="dot3">
+        </div>
+
     </div>
 
 
@@ -945,6 +1159,48 @@ and (max-height: 500px) {
 
     </div>
 
+    <!-- NAVIGATION HUD SCREEN -->
+    <div id="navigationHUD">
+
+        <div class="hud-scanlines"></div>
+
+        <div class="hud-reticle"></div>
+
+        <div class="hud-top">
+            <div class="hud-heading" id="hudHeading">---°</div>
+            <div class="hud-heading-label">HEADING</div>
+        </div>
+
+        <div class="hud-center">
+
+            <div class="hud-crosshair">
+                <div class="hud-car-symbol">▲</div>
+            </div>
+
+            <div id="hudManeuver">直進</div>
+
+            <div id="hudNextDistance">
+                次の方向まで ---
+            </div>
+
+        </div>
+
+        <div class="hud-bottom-left">
+            <div class="hud-small-label">SPEED</div>
+            <div>
+                <span class="hud-speed" id="hudSpeed">0</span>
+                <span class="hud-speed-unit">km/h</span>
+            </div>
+        </div>
+
+        <div class="hud-bottom-right">
+            <div class="hud-small-label">REMAINING</div>
+            <div class="hud-remaining" id="hudRemaining">---</div>
+            <div class="hud-destination" id="hudDestination">DESTINATION</div>
+        </div>
+
+    </div>
+
 </div>
 
 
@@ -977,9 +1233,17 @@ let gpsWatchId = null;
  * 0 = 全体ルート
  * 1 = 現在位置拡大
  * 2 = 天気
+ * 3 = ナビゲーションHUD
  */
 
 let currentScreen = 0;
+
+// ナビゲーションHUD用
+let currentSpeedKmh = 0;
+let currentHeading = null;
+let previousPositionForBearing = null;
+let currentStepIndex = 0;
+let routeSteps = [];
 
 
 /*
@@ -1110,7 +1374,7 @@ function switchToNextScreen() {
 
         currentScreen++;
 
-        if (currentScreen > 2) {
+        if (currentScreen > 3) {
 
             currentScreen = 0;
 
@@ -1193,6 +1457,42 @@ function showScreen(screen) {
 
     }
 
+    if (screen === 3 && destination) {
+
+        weatherScreen.classList.remove(
+            "visible"
+        );
+
+        navigationHUD.classList.add(
+            "visible"
+        );
+
+        updateNavigationHUD();
+
+        if (map && currentPosition) {
+
+            map.setCenter(
+                currentPosition
+            );
+
+            map.setZoom(17);
+
+            if (currentHeading !== null &&
+                typeof map.setHeading === "function") {
+
+                map.setHeading(
+                    currentHeading
+                );
+            }
+
+            if (typeof map.setTilt === "function") {
+                map.setTilt(0);
+            }
+        }
+
+        return;
+    }
+
 
     /*
      * 通常画面では天気画面を隠す
@@ -1255,8 +1555,38 @@ function showScreen(screen) {
 
             map.setZoom(17);
 
+            if (typeof map.setHeading === "function") {
+                map.setHeading(0);
+            }
         }
 
+    }
+
+    /*
+     * SCREEN 3
+     * 航空機HUD風ナビゲーション
+     */
+
+    if (screen === 3) {
+
+        if (currentPosition) {
+
+            map.setCenter(
+                currentPosition
+            );
+
+            map.setZoom(17);
+
+            if (currentHeading !== null &&
+                typeof map.setHeading === "function") {
+
+                map.setHeading(
+                    currentHeading
+                );
+            }
+        }
+
+        updateNavigationHUD();
     }
 
 }
@@ -1382,13 +1712,62 @@ function updateGPS(position) {
     const accuracy =
         position.coords.accuracy;
 
+    // GPSから速度・方位を取得
+    if (
+        typeof position.coords.speed === "number" &&
+        Number.isFinite(position.coords.speed) &&
+        position.coords.speed >= 0
+    ) {
 
-    currentPosition = {
+        currentSpeedKmh =
+            Math.max(
+                0,
+                position.coords.speed * 3.6
+            );
 
+    }
+
+    if (
+        typeof position.coords.heading === "number" &&
+        Number.isFinite(position.coords.heading) &&
+        position.coords.heading >= 0
+    ) {
+
+        currentHeading =
+            normalizeHeading(
+                position.coords.heading
+            );
+
+    }
+
+
+    const newPosition = {
         lat,
         lng
-
     };
+
+    // GPS headingが取れない場合は、前回位置から進行方向を推定
+    if (
+        currentHeading === null &&
+        previousPositionForBearing &&
+        distanceBetween(
+            newPosition,
+            previousPositionForBearing
+        ) >= 3
+    ) {
+
+        currentHeading =
+            calculateBearing(
+                previousPositionForBearing,
+                newPosition
+            );
+
+    }
+
+    previousPositionForBearing =
+        newPosition;
+
+    currentPosition = newPosition;
 
 
     document.getElementById("gpsStatus").textContent =
@@ -1398,6 +1777,21 @@ function updateGPS(position) {
 
 
     updateCarMarker();
+
+    updateNavigationHUD();
+
+    if (
+        currentScreen === 3 &&
+        map &&
+        currentHeading !== null &&
+        typeof map.setHeading === "function"
+    ) {
+
+        map.setHeading(
+            currentHeading
+        );
+
+    }
 
 
     /*
@@ -1478,6 +1872,9 @@ function updateCarMarker() {
         carElement.style.filter =
             "drop-shadow(0 2px 4px rgba(0,0,0,.8))";
 
+        carElement.style.transformOrigin =
+            "50% 50%";
+
 
         carMarker =
             new google.maps.marker.AdvancedMarkerElement({
@@ -1496,6 +1893,19 @@ function updateCarMarker() {
 
         carMarker.position =
             currentPosition;
+
+    }
+
+    if (carMarker && carMarker.content) {
+
+        carMarker.content.style.transform =
+            "rotate(" +
+            (
+                currentHeading === null
+                    ? 0
+                    : currentHeading
+            ) +
+            "deg)";
 
     }
 
@@ -1708,7 +2118,9 @@ async function calculateRoute(fitMap) {
 
                 "localizedValues",
 
-                "legs"
+                "legs",
+
+                "legs.steps"
 
             ]
 
@@ -1737,6 +2149,35 @@ async function calculateRoute(fitMap) {
 
         routeObject =
             response.routes[0];
+
+        // 次の方向表示に使うターン情報
+        routeSteps = [];
+
+        if (
+            routeObject.legs &&
+            routeObject.legs.length
+        ) {
+
+            routeObject.legs.forEach(
+                leg => {
+
+                    if (
+                        leg.steps &&
+                        leg.steps.length
+                    ) {
+
+                        routeSteps.push(
+                            ...leg.steps
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+        currentStepIndex = 0;
 
 
         /*
@@ -2000,6 +2441,384 @@ function updateRouteInformation() {
             "progressPercent"
         ).textContent =
             percent + "%";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   NAVIGATION HUD
+===================================================== */
+
+function normalizeHeading(degrees) {
+
+    return (
+        (degrees % 360) + 360
+    ) % 360;
+
+}
+
+
+function calculateBearing(a, b) {
+
+    const lat1 =
+        a.lat * Math.PI / 180;
+
+    const lat2 =
+        b.lat * Math.PI / 180;
+
+    const dLng =
+        (b.lng - a.lng) *
+        Math.PI / 180;
+
+    const y =
+        Math.sin(dLng) *
+        Math.cos(lat2);
+
+    const x =
+        Math.cos(lat1) *
+        Math.sin(lat2) -
+        Math.sin(lat1) *
+        Math.cos(lat2) *
+        Math.cos(dLng);
+
+    return normalizeHeading(
+        Math.atan2(y, x) *
+        180 / Math.PI
+    );
+
+}
+
+
+function getStepEndLocation(step) {
+
+    if (!step || !step.endLocation) {
+        return null;
+    }
+
+    if (
+        typeof step.endLocation.lat === "function" &&
+        typeof step.endLocation.lng === "function"
+    ) {
+
+        return {
+            lat: step.endLocation.lat(),
+            lng: step.endLocation.lng()
+        };
+
+    }
+
+    if (
+        typeof step.endLocation.lat === "number" &&
+        typeof step.endLocation.lng === "number"
+    ) {
+
+        return {
+            lat: step.endLocation.lat,
+            lng: step.endLocation.lng
+        };
+
+    }
+
+    return null;
+
+}
+
+
+function getManeuverDisplay(maneuver) {
+
+    const m =
+        String(maneuver || "")
+            .toUpperCase();
+
+    const table = {
+
+        "TURN_LEFT":
+            "↰  左折",
+
+        "TURN_RIGHT":
+            "↱  右折",
+
+        "TURN_SLIGHT_LEFT":
+            "↖  左方向",
+
+        "TURN_SLIGHT_RIGHT":
+            "↗  右方向",
+
+        "TURN_SHARP_LEFT":
+            "⤺  左急カーブ",
+
+        "TURN_SHARP_RIGHT":
+            "⤻  右急カーブ",
+
+        "UTURN_LEFT":
+            "↶  Uターン",
+
+        "UTURN_RIGHT":
+            "↷  Uターン",
+
+        "STRAIGHT":
+            "↑  直進",
+
+        "DEPART":
+            "↑  出発",
+
+        "RAMP_LEFT":
+            "↖  左ランプ",
+
+        "RAMP_RIGHT":
+            "↗  右ランプ",
+
+        "MERGE":
+            "↑  合流",
+
+        "FORK_LEFT":
+            "↖  左分岐",
+
+        "FORK_RIGHT":
+            "↗  右分岐",
+
+        "ROUNDABOUT_LEFT":
+            "⟲  ラウンドアバウト",
+
+        "ROUNDABOUT_RIGHT":
+            "⟳  ラウンドアバウト",
+
+        "ROUNDABOUT_STRAIGHT":
+            "⟳  ラウンドアバウト",
+
+        "ROUNDABOUT_EXIT":
+            "↑  ラウンドアバウト出口",
+
+        "NAME_CHANGE":
+            "↑  そのまま"
+
+    };
+
+    return (
+        table[m] ||
+        "↑  直進"
+    );
+
+}
+
+
+function formatHudDistance(meters) {
+
+    if (
+        meters === null ||
+        meters === undefined ||
+        !Number.isFinite(meters)
+    ) {
+
+        return "---";
+
+    }
+
+    if (meters < 1000) {
+
+        return (
+            Math.max(
+                0,
+                Math.round(meters / 10) * 10
+            ) +
+            " m"
+        );
+
+    }
+
+    return (
+        (meters / 1000)
+            .toFixed(
+                meters < 10000 ? 1 : 0
+            ) +
+        " km"
+    );
+
+}
+
+
+function updateCurrentRouteStep() {
+
+    if (
+        !currentPosition ||
+        !routeSteps.length
+    ) {
+
+        return null;
+
+    }
+
+    // 既に通過したstepを進める
+    while (
+        currentStepIndex <
+        routeSteps.length - 1
+    ) {
+
+        const step =
+            routeSteps[currentStepIndex];
+
+        const end =
+            getStepEndLocation(step);
+
+        if (!end) {
+
+            currentStepIndex++;
+            continue;
+
+        }
+
+        const distanceToEnd =
+            distanceBetween(
+                currentPosition,
+                end
+            );
+
+        if (distanceToEnd <= 35) {
+
+            currentStepIndex++;
+            continue;
+
+        }
+
+        break;
+
+    }
+
+    return routeSteps[
+        currentStepIndex
+    ] || null;
+
+}
+
+
+function updateNavigationHUD() {
+
+    if (!document.getElementById("navigationHUD")) {
+        return;
+    }
+
+    const headingEl =
+        document.getElementById("hudHeading");
+
+    const speedEl =
+        document.getElementById("hudSpeed");
+
+    const maneuverEl =
+        document.getElementById("hudManeuver");
+
+    const nextDistanceEl =
+        document.getElementById("hudNextDistance");
+
+    const remainingEl =
+        document.getElementById("hudRemaining");
+
+    const destinationEl =
+        document.getElementById("hudDestination");
+
+
+    // 方位
+    if (currentHeading !== null) {
+
+        const heading =
+            Math.round(
+                normalizeHeading(
+                    currentHeading
+                )
+            );
+
+        headingEl.textContent =
+            String(heading)
+                .padStart(3, "0") +
+            "°";
+
+    } else {
+
+        headingEl.textContent =
+            "---°";
+
+    }
+
+
+    // 速度
+    speedEl.textContent =
+        Math.round(
+            currentSpeedKmh
+        );
+
+
+    // 残り距離
+    if (routeObject) {
+
+        remainingEl.textContent =
+            formatHudDistance(
+                routeObject.distanceMeters
+            );
+
+    } else {
+
+        remainingEl.textContent =
+            "---";
+
+    }
+
+
+    if (destination) {
+
+        destinationEl.textContent =
+            destination.name ||
+            document.getElementById(
+                "destinationDisplay"
+            ).textContent ||
+            "DESTINATION";
+
+    }
+
+
+    // 次の方向
+    const step =
+        updateCurrentRouteStep();
+
+    if (!step) {
+
+        maneuverEl.textContent =
+            "↑  目的地へ";
+
+        nextDistanceEl.textContent =
+            "到着まで";
+
+        return;
+
+    }
+
+    maneuverEl.textContent =
+        getManeuverDisplay(
+            step.maneuver
+        );
+
+    const end =
+        getStepEndLocation(step);
+
+    if (end && currentPosition) {
+
+        const distanceToTurn =
+            distanceBetween(
+                currentPosition,
+                end
+            );
+
+        nextDistanceEl.textContent =
+            "次の方向まで  " +
+            formatHudDistance(
+                distanceToTurn
+            );
+
+    } else {
+
+        nextDistanceEl.textContent =
+            "次の方向まで ---";
 
     }
 
@@ -2444,7 +3263,7 @@ setInterval(
 ===================================================== -->
 
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbRU5gNHyLMG8Givp5ZrblOzPaucztPMM&v=weekly&callback=initMap"
+    src="https://maps.googleapis.com/maps/api/js?key=yAIzaSyAbRU5gNHyLMG8Givp5ZrblOzPaucztPMM&v=weekly&callback=initMap"
     async
     defer>
 </script>
