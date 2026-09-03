@@ -1,1409 +1,1045 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-
 <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
->
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no,
+               viewport-fit=cover">
 
-<title>Car Flight Map</title>
-
+<title>CAR FLIGHT MONITOR</title>
 
 <style>
-
-* {
-    box-sizing: border-box;
-}
-
-
-html,
-body {
-
-    margin: 0;
-    padding: 0;
-
-    width: 100%;
-    height: 100%;
-
-    overflow: hidden;
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
-
-    background: #05070a;
-    color: white;
-}
-
-
-#app {
-
-    width: 100%;
-    height: 100%;
-
-    position: relative;
-
-    overflow: hidden;
-}
-
-
-/* =========================================================
-   MAP
-========================================================= */
-
-#map {
-
-    width: 100%;
-    height: 100%;
-
-}
-
-
-/* =========================================================
-   TOP PANEL
-========================================================= */
-
-#topPanel {
-
-    position: absolute;
-
-    top: 18px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    width: min(600px, calc(100% - 30px));
-
-    background:
-        rgba(10, 14, 20, 0.94);
-
-    backdrop-filter: blur(12px);
-
-    border-radius: 18px;
-
-    padding: 15px;
-
-    z-index: 10;
-
-    box-shadow:
-        0 8px 30px rgba(0,0,0,.4);
-
-}
-
-
-#destinationInput {
-
-    width: 100%;
-
-    height: 46px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    padding:
-        0 14px;
-
-    font-size: 16px;
-
-    outline: none;
-
-}
-
-
-#routeButton {
-
-    width: 100%;
-
-    height: 44px;
-
-    margin-top: 9px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: #1976d2;
-
-    color: white;
-
-    font-size: 16px;
-
-    font-weight: 600;
-
-}
-
-
-#routeButton:active {
-
-    background: #1565c0;
-
-}
-
-
-/* =========================================================
-   FLIGHT PANEL
-========================================================= */
-
-#flightPanel {
-
-    position: absolute;
-
-    bottom: 20px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    width: min(700px, calc(100% - 30px));
-
-    background:
-        rgba(5, 9, 15, 0.95);
-
-    backdrop-filter: blur(15px);
-
-    border-radius: 22px;
-
-    padding: 22px;
-
-    z-index: 10;
-
-    box-shadow:
-        0 10px 40px rgba(0,0,0,.5);
-
-}
-
-
-#destinationName {
-
-    text-align: center;
-
-    font-size: 18px;
-
-    font-weight: 600;
-
-    margin-bottom: 5px;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-}
-
-
-#status {
-
-    text-align: center;
-
-    color: #9aa4b2;
-
-    font-size: 13px;
-
-    margin-bottom: 18px;
-
-}
-
-
-/* =========================================================
-   PROGRESS
-========================================================= */
-
-#progressContainer {
-
-    position: relative;
-
-    height: 45px;
-
-    margin:
-        0 10px 20px 10px;
-
-}
-
-
-#progressBackground {
-
-    position: absolute;
-
-    top: 21px;
-
-    left: 0;
-    right: 0;
-
-    height: 4px;
-
-    background: #39414c;
-
-    border-radius: 3px;
-
-}
-
-
-#progressBar {
-
-    position: absolute;
-
-    top: 21px;
-
-    left: 0;
-
-    height: 4px;
-
-    width: 0%;
-
-    background: #42a5f5;
-
-    border-radius: 3px;
-
-    transition:
-        width .8s ease;
-
-}
-
-
-#carIcon {
-
-    position: absolute;
-
-    top: 5px;
-
-    left: 0%;
-
-    transform:
-        translateX(-50%);
-
-    font-size: 25px;
-
-    transition:
-        left .8s ease;
-
-}
-
-
-#startDot,
-#endDot {
-
-    position: absolute;
-
-    top: 16px;
-
-    width: 14px;
-    height: 14px;
-
-    border-radius: 50%;
-
-    background: white;
-
-}
-
-
-#startDot {
-
-    left: 0;
-
-}
-
-
-#endDot {
-
-    right: 0;
-
-}
-
-
-/* =========================================================
-   STATS
-========================================================= */
-
-#stats {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    text-align: center;
-
-    gap: 10px;
-
-}
-
-
-.statLabel {
-
-    color: #8d98a6;
-
-    font-size: 12px;
-
-    margin-bottom: 4px;
-
-}
-
-
-.statValue {
-
-    font-size: 24px;
-
-    font-weight: 600;
-
-}
-
-
-.statUnit {
-
-    font-size: 12px;
-
-    color: #8d98a6;
-
-    margin-left: 3px;
-
-}
-
-
-/* =========================================================
-   GPS BUTTON
-========================================================= */
-
-#gpsButton {
-
-    position: absolute;
-
-    right: 18px;
-
-    bottom: 230px;
-
-    width: 52px;
-    height: 52px;
-
-    border-radius: 50%;
-
-    border: none;
-
-    background: white;
-
-    font-size: 24px;
-
-    cursor: pointer;
-
-    z-index: 10;
-
-    box-shadow:
-        0 3px 12px rgba(0,0,0,.4);
-
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 600px) {
-
-    #topPanel {
-
-        top: 12px;
-
+    * {
+        box-sizing: border-box;
     }
 
-
-    #flightPanel {
-
-        bottom: 10px;
-
-        padding: 18px;
-
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #05080d;
+        color: white;
+        font-family:
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
     }
 
-
-    .statValue {
-
-        font-size: 20px;
-
+    #app {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        background: #05080d;
     }
 
+    /* =========================
+       MAP
+       ========================= */
+
+    #map {
+        flex: 1;
+        height: 100%;
+        min-width: 0;
+        position: relative;
+    }
+
+    /* =========================
+       RIGHT PANEL
+       ========================= */
+
+    #panel {
+        width: 32%;
+        min-width: 300px;
+        max-width: 430px;
+        height: 100%;
+        background:
+            linear-gradient(
+                180deg,
+                #0b111a 0%,
+                #070b12 100%
+            );
+
+        border-left: 1px solid #263242;
+
+        padding:
+            max(16px, env(safe-area-inset-top))
+            20px
+            max(16px, env(safe-area-inset-bottom))
+            20px;
+
+        display: flex;
+        flex-direction: column;
+
+        overflow: hidden;
+    }
+
+    /* =========================
+       HEADER
+       ========================= */
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        margin-bottom: 12px;
+    }
+
+    .title {
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #8ea1b8;
+    }
+
+    .live {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        font-size: 11px;
+        letter-spacing: 1px;
+        color: #63e6a5;
+        font-weight: 700;
+    }
+
+    .live-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #63e6a5;
+        box-shadow: 0 0 8px #63e6a5;
+    }
+
+    /* =========================
+       DESTINATION
+       ========================= */
+
+    .destination-label {
+        font-size: 10px;
+        color: #72849a;
+        letter-spacing: 2px;
+        margin-top: 8px;
+    }
+
+    #destinationDisplay {
+        font-size: clamp(22px, 3vw, 34px);
+        font-weight: 700;
+        line-height: 1.15;
+
+        margin-top: 4px;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* =========================
+       SEARCH
+       ========================= */
+
+    .search-area {
+        display: flex;
+        gap: 7px;
+        margin-top: 12px;
+    }
+
+    #destinationInput {
+        flex: 1;
+        min-width: 0;
+
+        height: 40px;
+
+        border: 1px solid #344255;
+        border-radius: 6px;
+
+        background: #111925;
+        color: white;
+
+        padding: 0 11px;
+
+        font-size: 14px;
+
+        outline: none;
+    }
+
+    #destinationInput:focus {
+        border-color: #6f829c;
+    }
+
+    #routeButton {
+        height: 40px;
+
+        border: 0;
+        border-radius: 6px;
+
+        padding: 0 13px;
+
+        background: #e7edf5;
+        color: #111820;
+
+        font-size: 13px;
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+    #routeButton:active {
+        transform: scale(0.97);
+    }
+
+    /* =========================
+       MAIN NUMBERS
+       ========================= */
+
+    .main-info {
+        margin-top: 18px;
+
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        border-top: 1px solid #202c3a;
+        border-bottom: 1px solid #202c3a;
+    }
+
+    .info-box {
+        padding: 14px 8px;
+    }
+
+    .info-box + .info-box {
+        border-left: 1px solid #202c3a;
+    }
+
+    .info-label {
+        font-size: 10px;
+        color: #71849a;
+        letter-spacing: 1.5px;
+        margin-bottom: 4px;
+    }
+
+    .info-value {
+        font-size: clamp(23px, 3vw, 34px);
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .info-unit {
+        font-size: 12px;
+        color: #8b9bad;
+        margin-left: 3px;
+        font-weight: 400;
+    }
+
+    /* =========================
+       ETA
+       ========================= */
+
+    .eta {
+        margin-top: 14px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .eta-label {
+        font-size: 10px;
+        color: #71849a;
+        letter-spacing: 2px;
+    }
+
+    #etaValue {
+        font-size: clamp(27px, 3.5vw, 40px);
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    /* =========================
+       PROGRESS
+       ========================= */
+
+    .progress-area {
+        margin-top: 16px;
+    }
+
+    .progress-header {
+        display: flex;
+        justify-content: space-between;
+
+        font-size: 10px;
+        color: #71849a;
+        letter-spacing: 1px;
+    }
+
+    #progressPercent {
+        color: white;
+    }
+
+    .progress-track {
+        width: 100%;
+        height: 5px;
+
+        background: #273342;
+
+        border-radius: 10px;
+
+        margin-top: 7px;
+
+        overflow: hidden;
+    }
+
+    #progressBar {
+        width: 0%;
+        height: 100%;
+
+        background: #dfe8f2;
+
+        border-radius: 10px;
+
+        transition: width 0.5s ease;
+    }
+
+    /* =========================
+       GPS / STATUS
+       ========================= */
+
+    .status-area {
+        margin-top: auto;
+
+        border-top: 1px solid #202c3a;
+
+        padding-top: 12px;
+    }
+
+    #status {
+        font-size: 12px;
+        color: #a8b6c6;
+
+        min-height: 17px;
+
+        margin-bottom: 8px;
+    }
+
+    .gps-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #gpsStatus {
+        font-size: 11px;
+        color: #63e6a5;
+    }
 
     #gpsButton {
+        border: 1px solid #39495c;
+        background: #111925;
+        color: #dbe4ed;
 
-        bottom: 240px;
+        border-radius: 5px;
 
+        padding: 7px 10px;
+
+        font-size: 11px;
     }
 
-}
+    #gpsButton:active {
+        transform: scale(0.97);
+    }
 
+    /* =========================
+       MOBILE PORTRAIT
+       ========================= */
+
+    @media (orientation: portrait) {
+
+        #app {
+            flex-direction: column;
+        }
+
+        #map {
+            height: 58%;
+            flex: none;
+        }
+
+        #panel {
+            width: 100%;
+            max-width: none;
+            min-width: 0;
+
+            height: 42%;
+
+            border-left: 0;
+            border-top: 1px solid #263242;
+
+            padding:
+                10px
+                14px
+                max(10px, env(safe-area-inset-bottom))
+                14px;
+
+            overflow-y: auto;
+        }
+
+        .main-info {
+            margin-top: 10px;
+        }
+
+        .info-box {
+            padding: 9px 6px;
+        }
+
+        .eta {
+            margin-top: 8px;
+        }
+
+        .progress-area {
+            margin-top: 9px;
+        }
+
+        .status-area {
+            margin-top: 10px;
+        }
+    }
+
+    /* =========================
+       SMALL LANDSCAPE
+       ========================= */
+
+    @media (orientation: landscape) and (max-height: 500px) {
+
+        #panel {
+            width: 31%;
+            min-width: 270px;
+
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .destination-label {
+            margin-top: 2px;
+        }
+
+        .search-area {
+            margin-top: 7px;
+        }
+
+        .main-info {
+            margin-top: 9px;
+        }
+
+        .info-box {
+            padding: 9px 6px;
+        }
+
+        .eta {
+            margin-top: 8px;
+        }
+
+        .progress-area {
+            margin-top: 8px;
+        }
+
+        .status-area {
+            padding-top: 8px;
+        }
+    }
 </style>
-
 </head>
-
 
 <body>
 
-
 <div id="app">
 
-
-    <!-- =====================================================
-         MAP
-    ====================================================== -->
-
+    <!-- MAP -->
     <div id="map"></div>
 
+    <!-- INFORMATION PANEL -->
+    <div id="panel">
 
-    <!-- =====================================================
-         DESTINATION
-    ====================================================== -->
+        <div class="header">
+            <div class="title">
+                CAR FLIGHT MONITOR
+            </div>
 
-    <div id="topPanel">
+            <div class="live">
+                <span class="live-dot"></span>
+                LIVE
+            </div>
+        </div>
 
-
-        <input
-            id="destinationInput"
-            type="text"
-            placeholder="目的地を入力（例：東京駅）"
-            autocomplete="off"
-        >
-
-
-        <button id="routeButton">
-
-            🚗 ルートを検索
-
-        </button>
-
-
-    </div>
-
-
-    <!-- =====================================================
-         GPS BUTTON
-    ====================================================== -->
-
-    <button
-        id="gpsButton"
-        title="現在地へ移動"
-    >
-
-        ◎
-
-    </button>
-
-
-    <!-- =====================================================
-         FLIGHT STYLE PANEL
-    ====================================================== -->
-
-    <div id="flightPanel">
-
-
-        <div id="destinationName">
-
+        <div class="destination-label">
             DESTINATION
+        </div>
+
+        <div id="destinationDisplay">
+            ---
+        </div>
+
+        <div class="search-area">
+
+            <input
+                id="destinationInput"
+                type="text"
+                placeholder="目的地を入力"
+                autocomplete="off"
+            >
+
+            <button id="routeButton">
+                ROUTE
+            </button>
 
         </div>
 
+        <div class="main-info">
 
-        <div id="status">
+            <div class="info-box">
 
-            GPSを起動しています...
+                <div class="info-label">
+                    REMAINING
+                </div>
 
-        </div>
-
-
-        <!-- Progress -->
-
-        <div id="progressContainer">
-
-
-            <div id="progressBackground"></div>
-
-
-            <div id="progressBar"></div>
-
-
-            <div id="carIcon">
-
-                🚗
+                <div>
+                    <span id="distanceValue">---</span>
+                    <span class="info-unit">km</span>
+                </div>
 
             </div>
 
+            <div class="info-box">
 
-            <div id="startDot"></div>
+                <div class="info-label">
+                    TIME
+                </div>
 
+                <div>
+                    <span id="timeValue">---</span>
+                    <span class="info-unit">min</span>
+                </div>
 
-            <div id="endDot"></div>
-
+            </div>
 
         </div>
 
-
-        <!-- Stats -->
-
-        <div id="stats">
-
+        <div class="eta">
 
             <div>
-
-                <div class="statLabel">
-
-                    残り距離
-
+                <div class="eta-label">
+                    ESTIMATED ARRIVAL
                 </div>
-
-
-                <div class="statValue">
-
-                    <span id="remainingDistance">
-
-                        --
-
-                    </span>
-
-                    <span class="statUnit">
-
-                        km
-
-                    </span>
-
-                </div>
-
             </div>
 
-
-            <div>
-
-                <div class="statLabel">
-
-                    残り時間
-
-                </div>
-
-
-                <div class="statValue">
-
-                    <span id="remainingTime">
-
-                        --
-
-                    </span>
-
-                    <span class="statUnit">
-
-                        min
-
-                    </span>
-
-                </div>
-
+            <div id="etaValue">
+                --:--
             </div>
-
-
-            <div>
-
-                <div class="statLabel">
-
-                    到着予定
-
-                </div>
-
-
-                <div class="statValue">
-
-                    <span id="arrivalTime">
-
-                        --:--
-
-                    </span>
-
-                </div>
-
-            </div>
-
 
         </div>
 
+        <div class="progress-area">
+
+            <div class="progress-header">
+
+                <span>
+                    TRIP PROGRESS
+                </span>
+
+                <span id="progressPercent">
+                    0%
+                </span>
+
+            </div>
+
+            <div class="progress-track">
+                <div id="progressBar"></div>
+            </div>
+
+        </div>
+
+        <div class="status-area">
+
+            <div id="status">
+                目的地を入力してください
+            </div>
+
+            <div class="gps-row">
+
+                <div id="gpsStatus">
+                    GPS待機中
+                </div>
+
+                <button id="gpsButton">
+                    GPS START
+                </button>
+
+            </div>
+
+        </div>
 
     </div>
-
 
 </div>
 
 
-
 <script>
 
+let map;
 
-/* =========================================================
-   GLOBAL VARIABLES
-========================================================= */
-
-
-let map = null;
-
-let Route = null;
-
-let AdvancedMarkerElement = null;
-
+let carMarker = null;
 
 let currentPosition = null;
+
+let destination = null;
 
 let routeObject = null;
 
 let routePolylines = [];
 
-let carMarker = null;
-
-
-let watchId = null;
-
-
-/*
- * 入力された目的地
- */
-
-let destinationText = "";
-
-
-/*
- * 最初に検索したルート距離
- */
-
 let initialRouteDistance = null;
 
+let lastRouteUpdatePosition = null;
 
-/*
- * 最後にルートを再計算した時刻
- */
+let gpsWatchId = null;
 
-let lastRouteCalculationTime = 0;
-
-
-/*
- * 最後に再計算した位置
- */
-
-let lastRouteCalculationPosition = null;
+let firstRoute = true;
 
 
-/*
- * ルート再計算中かどうか
- */
-
-let routeCalculationInProgress = false;
-
-
-/*
- * 30秒ごとに再計算
- */
-
-const ROUTE_UPDATE_INTERVAL = 30000;
-
-
-/*
- * 少なくとも150m動いたら再計算
- */
-
-const ROUTE_UPDATE_DISTANCE = 150;
-
-
-/* =========================================================
-   INITIALIZE GOOGLE MAP
-========================================================= */
-
+/* ========================================
+   MAP INITIALIZATION
+   ======================================== */
 
 async function initMap() {
 
-
     try {
 
+        const { Map } =
+            await google.maps.importLibrary("maps");
 
-        const mapsLibrary =
-            await google.maps.importLibrary(
-                "maps"
-            );
+        const { AdvancedMarkerElement } =
+            await google.maps.importLibrary("marker");
 
+        map = new Map(
+            document.getElementById("map"),
+            {
+                center: {
+                    lat: 35.681236,
+                    lng: 139.767125
+                },
 
-        const routesLibrary =
-            await google.maps.importLibrary(
-                "routes"
-            );
+                zoom: 12,
 
+                mapId: "DEMO_MAP_ID",
 
-        const markerLibrary =
-            await google.maps.importLibrary(
-                "marker"
-            );
+                disableDefaultUI: true,
 
+                gestureHandling: "greedy"
+            }
+        );
 
-        const Map =
-            mapsLibrary.Map;
-
-
-        Route =
-            routesLibrary.Route;
-
-
-        AdvancedMarkerElement =
-            markerLibrary.AdvancedMarkerElement;
-
-
-        /*
-         * Map
-         */
-
-        map =
-            new Map(
-                document.getElementById("map"),
-                {
-
-                    center: {
-                        lat: 35.4437,
-                        lng: 139.6380
-                    },
-
-                    zoom: 15,
-
-                    mapTypeControl: false,
-
-                    streetViewControl: false,
-
-                    fullscreenControl: false,
-
-                    mapId: "DEMO_MAP_ID"
-
-                }
-            );
-
-
-        /*
-         * GPS開始
-         */
+        document.getElementById("status").textContent =
+            "GPSを取得しています…";
 
         startGPS();
 
-
-        /*
-         * ルートボタン
-         */
-
-        document
-            .getElementById("routeButton")
-            .addEventListener(
-                "click",
-                calculateRoute
-            );
-
-
-        /*
-         * GPSボタン
-         */
-
-        document
-            .getElementById("gpsButton")
-            .addEventListener(
-                "click",
-                centerOnCurrentLocation
-            );
-
-
-        /*
-         * Enterキーでも検索
-         */
-
-        document
-            .getElementById("destinationInput")
-            .addEventListener(
-                "keydown",
-                event => {
-
-                    if (
-                        event.key === "Enter"
-                    ) {
-
-                        calculateRoute();
-
-                    }
-
-                }
-            );
-
-
     } catch (error) {
 
+        console.error(error);
 
-        console.error(
-            "Google Maps initialization error:",
-            error
-        );
-
-
-        document
-            .getElementById("status")
-            .textContent =
-            "Google Mapsの初期化に失敗しました";
+        document.getElementById("status").textContent =
+            "Google Mapsの初期化に失敗しました。";
 
     }
-
 }
 
 
-/* =========================================================
+/* ========================================
    GPS
-========================================================= */
-
+   ======================================== */
 
 function startGPS() {
 
-
-    const statusElement =
-        document.getElementById("status");
-
-
-    statusElement.textContent =
-        "GPSを起動しています...";
-
-
-    /*
-     * GPS対応確認
-     */
-
     if (!navigator.geolocation) {
 
-        statusElement.textContent =
-            "このiPhoneでは位置情報を取得できません";
+        document.getElementById("gpsStatus").textContent =
+            "GPS非対応";
 
         return;
-
     }
 
+    document.getElementById("gpsStatus").textContent =
+        "GPS取得中…";
 
-    /*
-     * HTTPS確認
-     */
-
-    if (
-        location.protocol !== "https:"
-    ) {
-
-        statusElement.textContent =
-            "HTTPS接続が必要です";
-
-        return;
-
-    }
-
-
-    statusElement.textContent =
-        "iPhoneから現在地を取得中...";
-
-
-    /*
-     * 最初の1回を取得
-     */
 
     navigator.geolocation.getCurrentPosition(
 
         position => {
 
+            updateGPS(position);
 
-            console.log(
-                "GPS SUCCESS:",
-                position
-            );
-
-
-            currentPosition = {
-
-                lat:
-                    position.coords.latitude,
-
-                lng:
-                    position.coords.longitude
-
-            };
-
-
-            statusElement.textContent =
-                "現在地を取得しました";
-
-
-            /*
-             * 現在地へ移動
-             */
-
-            map.setCenter(
-                currentPosition
-            );
-
-
-            map.setZoom(16);
-
-
-            /*
-             * 車マーカー
-             */
-
-            updateCarPosition();
-
-
-            /*
-             * GPS継続監視
-             */
-
-            startGPSWatch();
-
+            watchGPS();
 
         },
-
 
         error => {
 
+            console.error(error);
 
-            console.error(
-                "GPS ERROR:",
-                error
-            );
+            document.getElementById("gpsStatus").textContent =
+                "GPS取得失敗";
 
-
-            let message =
-                "GPSエラー";
-
-
-            if (
-                error.code === 1
-            ) {
-
-                message =
-                    "位置情報の使用が許可されていません";
-
-            }
-
-
-            else if (
-                error.code === 2
-            ) {
-
-                message =
-                    "現在地を取得できませんでした";
-
-            }
-
-
-            else if (
-                error.code === 3
-            ) {
-
-                message =
-                    "GPS取得がタイムアウトしました";
-
-            }
-
-
-            statusElement.textContent =
-                message +
-                "（エラーコード " +
-                error.code +
-                "）";
-
+            document.getElementById("status").textContent =
+                "位置情報を取得できませんでした。";
 
         },
 
-
         {
-
             enableHighAccuracy: true,
-
-            timeout: 20000,
-
-            maximumAge: 0
-
+            maximumAge: 0,
+            timeout: 15000
         }
 
     );
-
 }
 
 
-/* =========================================================
+/* ========================================
    GPS WATCH
-========================================================= */
+   ======================================== */
 
+function watchGPS() {
 
-function startGPSWatch() {
-
-
-    if (
-        watchId !== null
-    ) {
-
-        navigator.geolocation.clearWatch(
-            watchId
-        );
-
+    if (gpsWatchId !== null) {
+        navigator.geolocation.clearWatch(gpsWatchId);
     }
 
-
-    watchId =
+    gpsWatchId =
         navigator.geolocation.watchPosition(
 
             position => {
 
+                updateGPS(position);
 
-                const newPosition = {
+            },
 
-                    lat:
-                        position.coords.latitude,
+            error => {
 
-                    lng:
-                        position.coords.longitude
+                console.error(error);
+
+                document.getElementById("gpsStatus").textContent =
+                    "GPSエラー";
+
+            },
+
+            {
+                enableHighAccuracy: true,
+                maximumAge: 1000,
+                timeout: 15000
+            }
+
+        );
+}
+
+
+/* ========================================
+   UPDATE GPS
+   ======================================== */
+
+function updateGPS(position) {
+
+    const lat =
+        position.coords.latitude;
+
+    const lng =
+        position.coords.longitude;
+
+    const accuracy =
+        position.coords.accuracy;
+
+    currentPosition = {
+        lat,
+        lng
+    };
+
+
+    document.getElementById("gpsStatus").textContent =
+        "GPS追跡中　精度 ±" +
+        Math.round(accuracy) +
+        "m";
+
+
+    updateCarMarker();
+
+
+    /*
+     * 目的地が設定されている場合、
+     * 150m以上移動したらルートを更新
+     */
+
+    if (
+        destination &&
+        lastRouteUpdatePosition
+    ) {
+
+        const moved =
+            distanceBetween(
+                currentPosition,
+                lastRouteUpdatePosition
+            );
+
+        if (moved >= 150) {
+
+            calculateRoute(false);
+
+        }
+
+    }
+}
+
+
+/* ========================================
+   CAR MARKER
+   ======================================== */
+
+function updateCarMarker() {
+
+    if (!map || !currentPosition) {
+        return;
+    }
+
+    if (!carMarker) {
+
+        const carElement =
+            document.createElement("div");
+
+        carElement.innerHTML = "🚗";
+
+        carElement.style.fontSize = "30px";
+
+        carElement.style.filter =
+            "drop-shadow(0 2px 4px rgba(0,0,0,.7))";
+
+        carMarker =
+            new google.maps.marker.AdvancedMarkerElement({
+                map: map,
+                position: currentPosition,
+                content: carElement,
+                title: "現在地"
+            });
+
+    } else {
+
+        carMarker.position =
+            currentPosition;
+
+    }
+}
+
+
+/* ========================================
+   ROUTE BUTTON
+   ======================================== */
+
+document
+    .getElementById("routeButton")
+    .addEventListener(
+        "click",
+        calculateRouteFromInput
+    );
+
+
+document
+    .getElementById("destinationInput")
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (event.key === "Enter") {
+
+                calculateRouteFromInput();
+
+            }
+
+        }
+    );
+
+
+/* ========================================
+   SEARCH DESTINATION
+   ======================================== */
+
+async function calculateRouteFromInput() {
+
+    const input =
+        document
+            .getElementById("destinationInput")
+            .value
+            .trim();
+
+    if (!input) {
+
+        document.getElementById("status").textContent =
+            "目的地を入力してください。";
+
+        return;
+    }
+
+    if (!currentPosition) {
+
+        document.getElementById("status").textContent =
+            "GPS位置を取得中です。少し待ってください。";
+
+        return;
+    }
+
+
+    document.getElementById("status").textContent =
+        "ルートを検索しています…";
+
+
+    try {
+
+        /*
+         * Geocoderで住所・施設名を座標に変換
+         */
+
+        const geocoder =
+            new google.maps.Geocoder();
+
+
+        geocoder.geocode(
+            {
+                address: input,
+                region: "JP"
+            },
+
+            results => {
+
+                if (
+                    !results ||
+                    !results.length
+                ) {
+
+                    document.getElementById("status").textContent =
+                        "目的地が見つかりませんでした。";
+
+                    return;
+                }
+
+
+                const location =
+                    results[0].geometry.location;
+
+
+                destination = {
+
+                    lat: location.lat(),
+                    lng: location.lng(),
+
+                    name:
+                        results[0].formatted_address
 
                 };
 
 
-                currentPosition =
-                    newPosition;
+                document.getElementById(
+                    "destinationDisplay"
+                ).textContent = input;
 
 
-                /*
-                 * GPS状態表示
-                 */
+                initialRouteDistance = null;
 
-                document
-                    .getElementById("status")
-                    .textContent =
-                    "GPS追跡中　精度 ±" +
-                    Math.round(
-                        position.coords.accuracy
-                    ) +
-                    "m";
+                firstRoute = true;
 
-
-                /*
-                 * 車を移動
-                 */
-
-                updateCarPosition();
-
-
-                /*
-                 * ルートがあれば
-                 * 必要に応じて再計算
-                 */
-
-                if (
-                    routeObject &&
-                    destinationText
-                ) {
-
-                    maybeRefreshRoute();
-
-                }
-
-            },
-
-
-            error => {
-
-
-                console.error(
-                    "GPS WATCH ERROR:",
-                    error
-                );
-
-
-                document
-                    .getElementById("status")
-                    .textContent =
-                    "GPS更新エラー（コード " +
-                    error.code +
-                    "）";
-
-
-            },
-
-
-            {
-
-                enableHighAccuracy: true,
-
-                maximumAge: 2000,
-
-                timeout: 20000
+                calculateRoute(true);
 
             }
-
         );
 
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById("status").textContent =
+            "目的地の検索に失敗しました。";
+
+    }
 }
 
 
-/* =========================================================
-   CAR MARKER
-========================================================= */
-
-
-function updateCarPosition() {
-
-
-    if (
-        !currentPosition ||
-        !map ||
-        !AdvancedMarkerElement
-    ) {
-
-        return;
-
-    }
-
-
-    /*
-     * 最初のマーカー
-     */
-
-    if (!carMarker) {
-
-
-        carMarker =
-            new AdvancedMarkerElement({
-
-                map: map,
-
-                position:
-                    currentPosition,
-
-                title:
-                    "現在位置"
-
-            });
-
-
-        return;
-
-    }
-
-
-    /*
-     * GPS更新
-     */
-
-    carMarker.position =
-        currentPosition;
-
-}
-
-
-/* =========================================================
-   CENTER GPS
-========================================================= */
-
-
-function centerOnCurrentLocation() {
-
-
-    if (!currentPosition) {
-
-
-        alert(
-            "まだGPS位置を取得できていません"
-        );
-
-
-        return;
-
-    }
-
-
-    map.panTo(
-        currentPosition
-    );
-
-
-    map.setZoom(17);
-
-}
-
-
-/* =========================================================
+/* ========================================
    CALCULATE ROUTE
-========================================================= */
+   ======================================== */
 
-
-async function calculateRoute() {
-
-
-    if (!currentPosition) {
-
-
-        alert(
-            "現在位置をまだ取得できていません。\n" +
-            "GPSを取得してから再度お試しください。"
-        );
-
-
-        return;
-
-    }
-
-
-    const input =
-        document
-            .getElementById(
-                "destinationInput"
-            );
-
-
-    destinationText =
-        input.value.trim();
-
-
-    if (!destinationText) {
-
-
-        alert(
-            "目的地を入力してください"
-        );
-
-
-        return;
-
-    }
-
-
-    /*
-     * 同じ目的地で検索し直す場合も
-     * 最初からスタート扱い
-     */
-
-    initialRouteDistance =
-        null;
-
-
-    lastRouteCalculationTime =
-        0;
-
-
-    lastRouteCalculationPosition =
-        null;
-
-
-    await refreshRoute(
-        true
-    );
-
-}
-
-
-/* =========================================================
-   REFRESH ROUTE
-========================================================= */
-
-
-async function refreshRoute(
-    firstSearch = false
-) {
-
+async function calculateRoute(fitMap) {
 
     if (
         !currentPosition ||
-        !destinationText ||
-        routeCalculationInProgress
+        !destination
     ) {
-
         return;
-
-    }
-
-
-    routeCalculationInProgress =
-        true;
-
-
-    const statusElement =
-        document.getElementById(
-            "status"
-        );
-
-
-    if (firstSearch) {
-
-        statusElement.textContent =
-            "ルートを検索しています...";
-
-    }
-    else {
-
-        statusElement.textContent =
-            "現在地からルートを更新中...";
-
     }
 
 
     try {
 
+        const { Route } =
+            await google.maps.importLibrary("routes");
+
 
         const request = {
 
-            origin:
-                currentPosition,
+            origin: currentPosition,
 
-            destination:
-                destinationText,
+            destination: destination,
 
-            travelMode:
-                "DRIVING",
+            travelMode: "DRIVING",
 
             routingPreference:
                 "TRAFFIC_AWARE",
 
             fields: [
-
                 "path",
-
                 "viewport",
-
                 "distanceMeters",
-
                 "durationMillis",
-
                 "localizedValues",
-
                 "legs"
-
             ]
 
         };
 
 
-        const result =
-            await Route.computeRoutes(
-                request
-            );
+        const response =
+            await Route.computeRoutes(request);
 
 
         if (
-            !result.routes ||
-            result.routes.length === 0
+            !response ||
+            !response.routes ||
+            !response.routes.length
         ) {
 
-            throw new Error(
-                "ルートが見つかりません"
-            );
+            document.getElementById("status").textContent =
+                "ルートを取得できませんでした。";
 
+            return;
         }
 
 
         routeObject =
-            result.routes[0];
+            response.routes[0];
 
 
         /*
-         * 最初のルート距離を保存
+         * 初回のルート距離を保存
          */
 
         if (
@@ -1420,531 +1056,269 @@ async function refreshRoute(
          * ルート描画
          */
 
-        drawRoute(
-            firstSearch
+        clearRoute();
+
+
+        routePolylines =
+            routeObject.createPolylines({
+                polylineOptions: {
+
+                    strokeColor: "#4285F4",
+
+                    strokeOpacity: 0.9,
+
+                    strokeWeight: 6
+
+                }
+            });
+
+
+        routePolylines.forEach(
+            polyline => {
+
+                polyline.setMap(map);
+
+            }
         );
 
 
         /*
-         * 距離・時間表示
+         * 地図を初回だけルート全体に合わせる
+         */
+
+        if (fitMap && routeObject.viewport) {
+
+            map.fitBounds(
+                routeObject.viewport,
+                {
+                    top: 40,
+                    right: 40,
+                    bottom: 40,
+                    left: 40
+                }
+            );
+
+        }
+
+
+        /*
+         * 最新GPS位置を記録
+         */
+
+        lastRouteUpdatePosition = {
+            ...currentPosition
+        };
+
+
+        /*
+         * 情報更新
          */
 
         updateRouteInformation();
 
 
-        /*
-         * 再計算情報を保存
-         */
-
-        lastRouteCalculationTime =
-            Date.now();
+        document.getElementById("status").textContent =
+            "走行中";
 
 
-        lastRouteCalculationPosition = {
+    } catch (error) {
 
-            lat:
-                currentPosition.lat,
+        console.error(error);
 
-            lng:
-                currentPosition.lng
-
-        };
-
-
-        /*
-         * GPS状態へ戻す
-         */
-
-        statusElement.textContent =
-            "GPS追跡中";
-
+        document.getElementById("status").textContent =
+            "ルートを取得できませんでした。\n" +
+            error.message;
 
     }
-
-
-    catch (error) {
-
-
-        console.error(
-            "Route error:",
-            error
-        );
-
-
-        statusElement.textContent =
-            "ルート検索に失敗しました";
-
-
-        /*
-         * 最初の検索だけアラート
-         */
-
-        if (firstSearch) {
-
-            alert(
-                "ルートを取得できませんでした。\n\n" +
-                error.message
-            );
-
-        }
-
-    }
-
-
-    finally {
-
-        routeCalculationInProgress =
-            false;
-
-    }
-
 }
 
 
-/* =========================================================
-   ROUTE REFRESH CHECK
-========================================================= */
+/* ========================================
+   CLEAR ROUTE
+   ======================================== */
 
-
-function maybeRefreshRoute() {
-
-
-    if (
-        !routeObject ||
-        !currentPosition ||
-        !lastRouteCalculationPosition
-    ) {
-
-        return;
-
-    }
-
-
-    const now =
-        Date.now();
-
-
-    const elapsed =
-        now -
-        lastRouteCalculationTime;
-
-
-    const moved =
-        haversineDistance(
-
-            currentPosition.lat,
-            currentPosition.lng,
-
-            lastRouteCalculationPosition.lat,
-            lastRouteCalculationPosition.lng
-
-        ) * 1000;
-
-
-    /*
-     * 30秒経過
-     * または
-     * 150m以上移動
-     */
-
-    if (
-        elapsed >= ROUTE_UPDATE_INTERVAL ||
-        moved >= ROUTE_UPDATE_DISTANCE
-    ) {
-
-
-        refreshRoute(
-            false
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   DRAW ROUTE
-========================================================= */
-
-
-function drawRoute(
-    firstSearch
-) {
-
-
-    /*
-     * 古いルートを削除
-     */
+function clearRoute() {
 
     routePolylines.forEach(
         polyline => {
 
-            polyline.setMap(
-                null
-            );
+            polyline.setMap(null);
 
         }
     );
-
 
     routePolylines = [];
 
-
-    /*
-     * 新しいルート
-     */
-
-    routePolylines =
-        routeObject.createPolylines();
-
-
-    routePolylines.forEach(
-        polyline => {
-
-            polyline.setMap(
-                map
-            );
-
-        }
-    );
-
-
-    /*
-     * 最初の検索だけ
-     * ルート全体を表示
-     *
-     * GPS更新時は
-     * ズームを変えない
-     */
-
-    if (
-        firstSearch &&
-        routeObject.viewport
-    ) {
-
-
-        map.fitBounds(
-            routeObject.viewport,
-            70
-        );
-
-    }
-
 }
 
 
-/* =========================================================
+/* ========================================
    ROUTE INFORMATION
-========================================================= */
-
+   ======================================== */
 
 function updateRouteInformation() {
 
-
     if (!routeObject) {
-
         return;
-
     }
 
 
-    const distance =
-        routeObject.distanceMeters;
+    const distanceMeters =
+        routeObject.distanceMeters || 0;
 
-
-    const duration =
-        routeObject.durationMillis;
-
-
-    /*
-     * 残り距離
-     */
-
-    if (
-        distance !== undefined &&
-        distance !== null
-    ) {
-
-
-        document
-            .getElementById(
-                "remainingDistance"
-            )
-            .textContent =
-            formatDistance(
-                distance
-            );
-
-    }
+    const durationMillis =
+        routeObject.durationMillis || 0;
 
 
     /*
-     * 残り時間
+     * km
      */
 
-    if (
-        duration !== undefined &&
-        duration !== null
-    ) {
+    const distanceKm =
+        distanceMeters / 1000;
 
 
-        const minutes =
-            Math.max(
-                1,
-                Math.ceil(
-                    duration / 60000
-                )
-            );
+    document.getElementById(
+        "distanceValue"
+    ).textContent =
+        distanceKm.toFixed(1);
 
 
-        document
-            .getElementById(
-                "remainingTime"
+    /*
+     * minutes
+     */
+
+    const minutes =
+        Math.max(
+            0,
+            Math.round(
+                durationMillis / 60000
             )
-            .textContent =
-            minutes;
-
-
-        updateArrivalTime(
-            minutes
         );
 
-    }
+
+    document.getElementById(
+        "timeValue"
+    ).textContent =
+        minutes;
 
 
     /*
-     * 目的地名
+     * ETA
      */
 
-    document
-        .getElementById(
-            "destinationName"
-        )
-        .textContent =
-        destinationText.toUpperCase();
-
-
-    /*
-     * 進捗
-     */
-
-    updateProgress();
-
-}
-
-
-/* =========================================================
-   DISTANCE FORMAT
-========================================================= */
-
-
-function formatDistance(
-    meters
-) {
-
-
-    const km =
-        meters / 1000;
-
-
-    if (
-        km < 1
-    ) {
-
-        return km.toFixed(2);
-
-    }
-
-
-    return km.toFixed(1);
-
-}
-
-
-/* =========================================================
-   ARRIVAL TIME
-========================================================= */
-
-
-function updateArrivalTime(
-    minutes
-) {
-
-
-    const arrival =
+    const eta =
         new Date(
-            Date.now() +
-            minutes * 60000
+            Date.now() + durationMillis
         );
 
 
     const hours =
         String(
-            arrival.getHours()
-        ).padStart(
-            2,
-            "0"
-        );
+            eta.getHours()
+        ).padStart(2, "0");
 
 
     const mins =
         String(
-            arrival.getMinutes()
-        ).padStart(
-            2,
-            "0"
-        );
+            eta.getMinutes()
+        ).padStart(2, "0");
 
 
-    document
-        .getElementById(
-            "arrivalTime"
-        )
-        .textContent =
-        `${hours}:${mins}`;
-
-}
+    document.getElementById(
+        "etaValue"
+    ).textContent =
+        hours + ":" + mins;
 
 
-/* =========================================================
-   PROGRESS
-========================================================= */
-
-
-function updateProgress() {
-
+    /*
+     * progress
+     */
 
     if (
-        !routeObject ||
-        !currentPosition ||
-        !initialRouteDistance
+        initialRouteDistance &&
+        initialRouteDistance > 0
     ) {
 
-        return;
+        let progress =
+            1 -
+            (
+                distanceMeters /
+                initialRouteDistance
+            );
+
+
+        progress =
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    progress
+                )
+            );
+
+
+        const percent =
+            Math.round(
+                progress * 100
+            );
+
+
+        document.getElementById(
+            "progressBar"
+        ).style.width =
+            percent + "%";
+
+
+        document.getElementById(
+            "progressPercent"
+        ).textContent =
+            percent + "%";
 
     }
 
-
-    const remainingDistance =
-        routeObject.distanceMeters;
-
-
-    /*
-     * 最初のルート距離に対して
-     * 現在どこまで進んだかを計算
-     */
-
-    let progress =
-        1 -
-        (
-            remainingDistance /
-            initialRouteDistance
-        );
-
-
-    progress =
-        Math.max(
-            0,
-            Math.min(
-                1,
-                progress
-            )
-        );
-
-
-    const percentage =
-        progress * 100;
-
-
-    /*
-     * プログレスバー
-     */
-
-    document
-        .getElementById(
-            "progressBar"
-        )
-        .style.width =
-        percentage + "%";
-
-
-    /*
-     * 車アイコン
-     */
-
-    document
-        .getElementById(
-            "carIcon"
-        )
-        .style.left =
-        percentage + "%";
-
 }
 
 
-/* =========================================================
-   HAVERSINE DISTANCE
-========================================================= */
+/* ========================================
+   DISTANCE BETWEEN GPS POINTS
+   ======================================== */
 
+function distanceBetween(a, b) {
 
-function haversineDistance(
-    lat1,
-    lon1,
-    lat2,
-    lon2
-) {
+    const R = 6371000;
 
+    const lat1 =
+        a.lat * Math.PI / 180;
 
-    const R =
-        6371;
-
+    const lat2 =
+        b.lat * Math.PI / 180;
 
     const dLat =
-        degreesToRadians(
-            lat2 - lat1
-        );
+        (b.lat - a.lat) *
+        Math.PI / 180;
+
+    const dLng =
+        (b.lng - a.lng) *
+        Math.PI / 180;
 
 
-    const dLon =
-        degreesToRadians(
-            lon2 - lon1
-        );
+    const x =
+        Math.sin(dLat / 2) *
+        Math.sin(dLat / 2) +
 
+        Math.cos(lat1) *
+        Math.cos(lat2) *
 
-    const a =
-        Math.sin(
-            dLat / 2
-        ) *
-        Math.sin(
-            dLat / 2
-        ) +
-
-        Math.cos(
-            degreesToRadians(
-                lat1
-            )
-        ) *
-
-        Math.cos(
-            degreesToRadians(
-                lat2
-            )
-        ) *
-
-        Math.sin(
-            dLon / 2
-        ) *
-
-        Math.sin(
-            dLon / 2
-        );
+        Math.sin(dLng / 2) *
+        Math.sin(dLng / 2);
 
 
     const c =
         2 *
         Math.atan2(
-            Math.sqrt(a),
-            Math.sqrt(1 - a)
+            Math.sqrt(x),
+            Math.sqrt(1 - x)
         );
 
 
@@ -1953,50 +1327,70 @@ function haversineDistance(
 }
 
 
-/* =========================================================
-   DEGREES
-========================================================= */
+/* ========================================
+   GPS BUTTON
+   ======================================== */
+
+document
+    .getElementById("gpsButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            if (
+                currentPosition &&
+                map
+            ) {
+
+                map.setCenter(
+                    currentPosition
+                );
+
+                map.setZoom(16);
+
+            } else {
+
+                startGPS();
+
+            }
+
+        }
+    );
 
 
-function degreesToRadians(
-    degrees
-) {
+/* ========================================
+   PERIODIC ROUTE UPDATE
+   ======================================== */
 
+setInterval(
+    () => {
 
-    return degrees *
-        Math.PI /
-        180;
+        if (
+            destination &&
+            currentPosition
+        ) {
 
-}
+            calculateRoute(false);
 
+        }
 
-/* =========================================================
-   START
-========================================================= */
-
-
-window.initMap =
-    initMap;
-
+    },
+    30000
+);
 
 </script>
 
 
-
-<!-- =========================================================
-     GOOGLE MAPS API
+<!--
+=========================================================
+ Google Maps API
 =========================================================
 
-     ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+↓ ここだけ、自分のAPIキーを入れてください。
 
-     ここだけ自分のAPIキーを入れてください。
-
-     YOUR_API_KEY
-     ↓
-     あなたのGoogle Maps API Key
-
-========================================================= -->
-
+現在使っているAPIキーをそのまま使用してください。
+このチャットにはAPIキーを貼らないでください。
+-->
 
 <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbRU5gNHyLMG8Givp5ZrblOzPaucztPMM&v=weekly&callback=initMap"
@@ -2004,7 +1398,5 @@ window.initMap =
     defer>
 </script>
 
-
 </body>
-
 </html>
