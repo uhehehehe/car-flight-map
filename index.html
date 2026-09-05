@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -40,9 +41,10 @@ body {
     inset: 0;
 }
 
-/* =========================
-   情報パネル
-========================= */
+
+/* =====================================================
+   右側パネル
+===================================================== */
 
 #panel {
 
@@ -51,14 +53,14 @@ body {
     top: 0;
     right: 0;
 
-    width: 330px;
+    width: 340px;
     height: 100%;
 
-    background: rgba(5, 10, 18, 0.92);
+    background: rgba(5, 10, 18, 0.94);
 
     color: white;
 
-    padding: 20px;
+    padding: 18px;
 
     z-index: 10;
 
@@ -66,33 +68,114 @@ body {
     flex-direction: column;
 
     backdrop-filter: blur(8px);
+
+    overflow-y: auto;
 }
 
 .title {
 
     font-size: 13px;
+
     letter-spacing: 2px;
 
     color: #8fa8c5;
 
+    margin-bottom: 4px;
+}
+
+
+/* =====================================================
+   目的地入力
+===================================================== */
+
+.inputLabel {
+
+    font-size: 12px;
+
+    color: #8fa0b2;
+
+    margin-top: 10px;
+
     margin-bottom: 5px;
 }
 
-.destination {
+#destinationInput {
 
-    font-size: 24px;
-    font-weight: 700;
+    width: 100%;
 
-    margin-bottom: 20px;
+    height: 43px;
+
+    border: 1px solid rgba(255,255,255,0.2);
+
+    border-radius: 7px;
+
+    background: rgba(255,255,255,0.08);
+
+    color: white;
+
+    font-size: 16px;
+
+    padding: 0 12px;
+
+    outline: none;
 }
 
-/* =========================
-   数値表示
-========================= */
+#destinationInput::placeholder {
+
+    color: #78879a;
+}
+
+#searchButton {
+
+    width: 100%;
+
+    height: 42px;
+
+    margin-top: 8px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #1976d2;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 600;
+}
+
+#searchButton:active {
+
+    opacity: 0.7;
+}
+
+
+/* =====================================================
+   目的地
+===================================================== */
+
+.destination {
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+    margin-top: 15px;
+
+    margin-bottom: 14px;
+}
+
+
+/* =====================================================
+   数値
+===================================================== */
 
 .mainValue {
 
-    font-size: 42px;
+    font-size: 40px;
+
     font-weight: 700;
 
     line-height: 1;
@@ -104,10 +187,15 @@ body {
 
     color: #aeb8c5;
 
-    font-size: 14px;
+    font-size: 13px;
 
-    margin-bottom: 22px;
+    margin-bottom: 18px;
 }
+
+
+/* =====================================================
+   情報行
+===================================================== */
 
 .infoRow {
 
@@ -117,7 +205,7 @@ body {
 
     align-items: center;
 
-    padding: 12px 0;
+    padding: 10px 0;
 
     border-bottom: 1px solid rgba(255,255,255,0.12);
 }
@@ -126,23 +214,24 @@ body {
 
     color: #91a0b2;
 
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .infoValue {
 
-    font-size: 18px;
+    font-size: 17px;
 
     font-weight: 600;
 }
 
-/* =========================
+
+/* =====================================================
    プログレス
-========================= */
+===================================================== */
 
 .progressContainer {
 
-    margin-top: 20px;
+    margin-top: 18px;
 }
 
 .progressLabel {
@@ -161,6 +250,7 @@ body {
 .progressBar {
 
     width: 100%;
+
     height: 7px;
 
     background: rgba(255,255,255,0.12);
@@ -181,9 +271,10 @@ body {
     transition: width 0.8s ease;
 }
 
-/* =========================
+
+/* =====================================================
    GPS
-========================= */
+===================================================== */
 
 .gpsStatus {
 
@@ -198,28 +289,27 @@ body {
 
 .gpsButton {
 
-    margin-top: 12px;
+    margin-top: 10px;
 
     width: 100%;
 
-    padding: 12px;
+    padding: 10px;
 
     border: none;
 
-    border-radius: 8px;
+    border-radius: 7px;
 
-    background: #1d73d5;
+    background: #26384d;
 
     color: white;
 
-    font-size: 15px;
-
-    font-weight: 600;
+    font-size: 13px;
 }
 
-/* =========================
+
+/* =====================================================
    天気画面
-========================= */
+===================================================== */
 
 #weatherScreen {
 
@@ -255,7 +345,6 @@ body {
 .weatherInner {
 
     width: min(600px, 90%);
-
 }
 
 .weatherTitle {
@@ -353,9 +442,10 @@ body {
     color: #68788c;
 }
 
-/* =========================
+
+/* =====================================================
    画面インジケーター
-========================= */
+===================================================== */
 
 #screenIndicator {
 
@@ -394,9 +484,10 @@ body {
     background: white;
 }
 
-/* =========================
+
+/* =====================================================
    凡例
-========================= */
+===================================================== */
 
 #legend {
 
@@ -434,40 +525,38 @@ body {
 .legendLine {
 
     width: 25px;
+
     height: 5px;
 
     border-radius: 5px;
 }
 
 .legendDone {
+
     background: #777;
 }
 
 .legendNormal {
+
     background: #1976d2;
 }
 
-.legendSlow {
-    background: #ff9800;
-}
 
-.legendJam {
-    background: #f44336;
-}
-
-/* =========================
+/* =====================================================
    縦画面
-========================= */
+===================================================== */
 
 @media (orientation: portrait) {
 
     #panel {
 
         top: auto;
+
         bottom: 0;
 
         width: 100%;
-        height: 235px;
+
+        height: 300px;
 
         padding: 12px 16px;
     }
@@ -475,6 +564,8 @@ body {
     .destination {
 
         font-size: 20px;
+
+        margin-top: 8px;
 
         margin-bottom: 8px;
     }
@@ -491,7 +582,7 @@ body {
 
     .infoRow {
 
-        padding: 7px 0;
+        padding: 6px 0;
     }
 
     .progressContainer {
@@ -511,7 +602,7 @@ body {
 
     #legend {
 
-        bottom: 245px;
+        bottom: 310px;
     }
 }
 
@@ -526,9 +617,9 @@ body {
     <div id="map"></div>
 
 
-    <!-- =========================
+    <!-- =================================================
          情報パネル
-    ========================== -->
+    ================================================== -->
 
     <div id="panel">
 
@@ -536,13 +627,39 @@ body {
             CAR FLIGHT MONITOR
         </div>
 
+
+        <!-- 目的地入力 -->
+
+        <div class="inputLabel">
+            DESTINATION
+        </div>
+
+        <input
+            id="destinationInput"
+            type="text"
+            placeholder="目的地を入力"
+            value="東京駅"
+        >
+
+        <button
+            id="searchButton"
+            onclick="searchDestination()"
+        >
+            ルート検索
+        </button>
+
+
+        <!-- 目的地 -->
+
         <div
             class="destination"
             id="destinationName"
         >
-            DESTINATION
+            --
         </div>
 
+
+        <!-- 残り距離 -->
 
         <div
             class="mainValue"
@@ -558,6 +675,8 @@ body {
             Remaining distance
         </div>
 
+
+        <!-- 残り時間 -->
 
         <div class="infoRow">
 
@@ -575,6 +694,8 @@ body {
         </div>
 
 
+        <!-- ETA -->
+
         <div class="infoRow">
 
             <div class="infoLabel">
@@ -591,6 +712,8 @@ body {
         </div>
 
 
+        <!-- GPS精度 -->
+
         <div class="infoRow">
 
             <div class="infoLabel">
@@ -606,6 +729,8 @@ body {
 
         </div>
 
+
+        <!-- 進捗 -->
 
         <div class="progressContainer">
 
@@ -646,15 +771,15 @@ body {
             class="gpsButton"
             onclick="showCurrentPosition()"
         >
-            GPS START
+            現在位置を見る
         </button>
 
     </div>
 
 
-    <!-- =========================
+    <!-- =================================================
          凡例
-    ========================== -->
+    ================================================== -->
 
     <div id="legend">
 
@@ -671,34 +796,16 @@ body {
 
             <div class="legendLine legendNormal"></div>
 
-            <span>通常</span>
-
-        </div>
-
-
-        <div class="legendRow">
-
-            <div class="legendLine legendSlow"></div>
-
-            <span>やや渋滞</span>
-
-        </div>
-
-
-        <div class="legendRow">
-
-            <div class="legendLine legendJam"></div>
-
-            <span>渋滞</span>
+            <span>残りルート</span>
 
         </div>
 
     </div>
 
 
-    <!-- =========================
+    <!-- =================================================
          天気画面
-    ========================== -->
+    ================================================== -->
 
     <div id="weatherScreen">
 
@@ -813,9 +920,9 @@ body {
     </div>
 
 
-    <!-- =========================
+    <!-- =================================================
          画面インジケーター
-    ========================== -->
+    ================================================== -->
 
     <div id="screenIndicator">
 
@@ -841,45 +948,20 @@ body {
 
 <script>
 
-/* =========================================================
+/* =====================================================
    設定
-========================================================= */
-
-/*
-   ★ここだけ変更してください
-
-   出発地・目的地は自由に変更できます。
-*/
-
-const DEPARTURE = "横浜駅";
-
-const DESTINATION = "東京駅";
-
-
-/*
-   ルート再計算間隔
-*/
+===================================================== */
 
 const ROUTE_RECALC_INTERVAL = 30000;
 
-
-/*
-   何m動いたらルートを再計算するか
-*/
-
 const ROUTE_RECALC_DISTANCE = 150;
-
-
-/*
-   画面切り替え
-*/
 
 const SCREEN_INTERVAL = 10000;
 
 
-/* =========================================================
+/* =====================================================
    グローバル変数
-========================================================= */
+===================================================== */
 
 let map;
 
@@ -889,87 +971,38 @@ let AdvancedMarkerElement;
 
 let currentPosition = null;
 
-let departurePosition = null;
-
 let destinationPosition = null;
 
-let departureMarker = null;
+let destinationName = "";
 
 let destinationMarker = null;
 
 let carMarker = null;
 
-
-/*
-   現在のルート
-*/
-
 let currentRoute = null;
 
-
-/*
-   交通状況付きポリライン
-*/
-
-let trafficPolylines = [];
-
-
-/*
-   走行済みルート
-*/
-
-let traveledPath = [];
+let routePolyline = null;
 
 let traveledPolyline = null;
 
-
-/*
-   ルート全体を表示するための情報
-*/
+let traveledPath = [];
 
 let routeViewport = null;
 
-
-/*
-   初回ルート距離
-*/
-
 let initialRouteDistance = null;
 
-
-/*
-   前回ルート計算位置
-*/
-
 let lastRouteCalculationPosition = null;
-
-
-/*
-   画面
-*/
 
 let currentScreen = 0;
 
 let screenTimer = null;
 
-
-/*
-   GPS
-*/
-
 let watchId = null;
 
 
-/*
-   天気
-*/
-
-let weatherLoaded = false;
-
-
-/* =========================================================
-   Map 初期化
-========================================================= */
+/* =====================================================
+   Google Maps 初期化
+===================================================== */
 
 async function initMap() {
 
@@ -1005,165 +1038,21 @@ async function initMap() {
             disableDefaultUI: true,
 
             gestureHandling: "greedy"
+
         }
     );
 
 
-    /*
-       目的地名を表示
-    */
-
-    document.getElementById(
-        "destinationName"
-    ).textContent = DESTINATION;
-
-
-    document.getElementById(
-        "weatherDestination"
-    ).textContent = DESTINATION;
-
-
-    /*
-       出発地・目的地を座標化
-    */
-
-    await geocodePlaces();
-
-
-    /*
-       GPS開始
-    */
-
     startGPS();
-
-
-    /*
-       画面切り替え
-    */
 
     startScreenTimer();
 
-
-    /*
-       初回ルート
-    */
-
-    calculateRoute();
-
 }
 
 
-/* =========================================================
-   Geocoding
-========================================================= */
-
-async function geocodePlaces() {
-
-    const geocoder =
-        new google.maps.Geocoder();
-
-
-    const departureResult =
-        await geocoder.geocode({
-            address: DEPARTURE
-        });
-
-
-    if (
-        !departureResult.results ||
-        !departureResult.results.length
-    ) {
-
-        throw new Error(
-            "出発地を検索できませんでした"
-        );
-
-    }
-
-
-    const departureLocation =
-        departureResult.results[0]
-            .geometry.location;
-
-
-    departurePosition = {
-
-        lat: departureLocation.lat(),
-
-        lng: departureLocation.lng()
-
-    };
-
-
-    const destinationResult =
-        await geocoder.geocode({
-            address: DESTINATION
-        });
-
-
-    if (
-        !destinationResult.results ||
-        !destinationResult.results.length
-    ) {
-
-        throw new Error(
-            "目的地を検索できませんでした"
-        );
-
-    }
-
-
-    const destinationLocation =
-        destinationResult.results[0]
-            .geometry.location;
-
-
-    destinationPosition = {
-
-        lat: destinationLocation.lat(),
-
-        lng: destinationLocation.lng()
-
-    };
-
-
-    /*
-       出発地マーカー
-    */
-
-    departureMarker =
-        new AdvancedMarkerElement({
-
-            map: map,
-
-            position: departurePosition,
-
-            title: "出発地"
-
-        });
-
-
-    /*
-       目的地マーカー
-    */
-
-    destinationMarker =
-        new AdvancedMarkerElement({
-
-            map: map,
-
-            position: destinationPosition,
-
-            title: "目的地"
-
-        });
-
-}
-
-
-/* =========================================================
-   GPS
-========================================================= */
+/* =====================================================
+   GPS開始
+===================================================== */
 
 function startGPS() {
 
@@ -1206,9 +1095,9 @@ function startGPS() {
 }
 
 
-/* =========================================================
-   GPS位置更新
-========================================================= */
+/* =====================================================
+   GPS更新
+===================================================== */
 
 function handleGPS(position) {
 
@@ -1223,10 +1112,6 @@ function handleGPS(position) {
 
     currentPosition = newPosition;
 
-
-    /*
-       GPS精度
-    */
 
     const accuracy =
         Math.round(
@@ -1246,16 +1131,8 @@ function handleGPS(position) {
         `GPS追跡中　精度 ±${accuracy}m`;
 
 
-    /*
-       車マーカー
-    */
-
     updateCarMarker();
 
-
-    /*
-       走行済みルート
-    */
 
     recordTraveledPath(
         currentPosition
@@ -1263,28 +1140,37 @@ function handleGPS(position) {
 
 
     /*
-       ルート再計算判定
+       目的地が設定されている場合
+       ルートを自動更新
     */
 
-    if (!lastRouteCalculationPosition) {
-
-        calculateRoute();
-
-    } else {
-
-        const distance =
-            distanceBetween(
-                lastRouteCalculationPosition,
-                currentPosition
-            );
-
+    if (
+        destinationPosition
+    ) {
 
         if (
-            distance >=
-            ROUTE_RECALC_DISTANCE
+            !lastRouteCalculationPosition
         ) {
 
             calculateRoute();
+
+        } else {
+
+            const distance =
+                distanceBetween(
+                    lastRouteCalculationPosition,
+                    currentPosition
+                );
+
+
+            if (
+                distance >=
+                ROUTE_RECALC_DISTANCE
+            ) {
+
+                calculateRoute();
+
+            }
 
         }
 
@@ -1295,7 +1181,9 @@ function handleGPS(position) {
        現在位置画面なら中央追従
     */
 
-    if (currentScreen === 1) {
+    if (
+        currentScreen === 1
+    ) {
 
         map.setCenter(
             currentPosition
@@ -1306,9 +1194,9 @@ function handleGPS(position) {
 }
 
 
-/* =========================================================
+/* =====================================================
    GPSエラー
-========================================================= */
+===================================================== */
 
 function handleGPSError(error) {
 
@@ -1320,9 +1208,9 @@ function handleGPSError(error) {
 }
 
 
-/* =========================================================
+/* =====================================================
    車マーカー
-========================================================= */
+===================================================== */
 
 function updateCarMarker() {
 
@@ -1340,7 +1228,9 @@ function updateCarMarker() {
         carElement.style.fontSize =
             "30px";
 
-        carElement.textContent = "🚗";
+
+        carElement.textContent =
+            "🚗";
 
 
         carMarker =
@@ -1348,11 +1238,14 @@ function updateCarMarker() {
 
                 map: map,
 
-                position: currentPosition,
+                position:
+                    currentPosition,
 
-                content: carElement,
+                content:
+                    carElement,
 
-                title: "現在位置"
+                title:
+                    "現在位置"
 
             });
 
@@ -1366,11 +1259,13 @@ function updateCarMarker() {
 }
 
 
-/* =========================================================
+/* =====================================================
    走行済みルート記録
-========================================================= */
+===================================================== */
 
-function recordTraveledPath(position) {
+function recordTraveledPath(
+    position
+) {
 
     if (!position) {
         return;
@@ -1381,12 +1276,18 @@ function recordTraveledPath(position) {
        初回
     */
 
-    if (traveledPath.length === 0) {
+    if (
+        traveledPath.length === 0
+    ) {
 
         traveledPath.push({
+
             lat: position.lat,
+
             lng: position.lng
+
         });
+
 
         drawTraveledPath();
 
@@ -1408,11 +1309,15 @@ function recordTraveledPath(position) {
 
 
     /*
-       10m未満なら記録しない
+       10m未満は記録しない
     */
 
-    if (distance < 10) {
+    if (
+        distance < 10
+    ) {
+
         return;
+
     }
 
 
@@ -1430,20 +1335,24 @@ function recordTraveledPath(position) {
 }
 
 
-/* =========================================================
+/* =====================================================
    走行済みルート描画
-========================================================= */
+===================================================== */
 
 function drawTraveledPath() {
 
     if (
         traveledPath.length < 2
     ) {
+
         return;
+
     }
 
 
-    if (traveledPolyline) {
+    if (
+        traveledPolyline
+    ) {
 
         traveledPolyline.setMap(
             null
@@ -1455,33 +1364,40 @@ function drawTraveledPath() {
     traveledPolyline =
         new google.maps.Polyline({
 
-            path: traveledPath,
+            path:
+                traveledPath,
 
-            map: map,
+            map:
+                map,
 
-            strokeColor: "#777777",
+            strokeColor:
+                "#777777",
 
-            strokeOpacity: 0.9,
+            strokeOpacity:
+                0.9,
 
-            strokeWeight: 8,
+            strokeWeight:
+                8,
 
-            zIndex: 2
+            zIndex:
+                2
 
         });
 
 }
 
 
-/* =========================================================
+/* =====================================================
    距離計算
-========================================================= */
+===================================================== */
 
 function distanceBetween(
     a,
     b
 ) {
 
-    const R = 6371000;
+    const R =
+        6371000;
 
 
     const lat1 =
@@ -1511,8 +1427,10 @@ function distanceBetween(
     const x =
         Math.sin(dLat / 2) *
         Math.sin(dLat / 2) +
+
         Math.cos(lat1) *
         Math.cos(lat2) *
+
         Math.sin(dLng / 2) *
         Math.sin(dLng / 2);
 
@@ -1529,31 +1447,245 @@ function distanceBetween(
 }
 
 
-/* =========================================================
+/* =====================================================
+   目的地検索
+===================================================== */
+
+async function searchDestination() {
+
+    const input =
+        document.getElementById(
+            "destinationInput"
+        );
+
+
+    const value =
+        input.value.trim();
+
+
+    if (!value) {
+
+        alert(
+            "目的地を入力してください"
+        );
+
+        return;
+
+    }
+
+
+    if (!currentPosition) {
+
+        alert(
+            "GPS位置を取得中です。少し待ってから検索してください。"
+        );
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "gpsStatus"
+    ).textContent =
+        "目的地を検索中...";
+
+
+    try {
+
+        const geocoder =
+            new google.maps.Geocoder();
+
+
+        const result =
+            await geocoder.geocode({
+
+                address: value
+
+            });
+
+
+        if (
+            !result.results ||
+            result.results.length === 0
+        ) {
+
+            throw new Error(
+                "目的地が見つかりません"
+            );
+
+        }
+
+
+        const location =
+            result.results[0]
+                .geometry
+                .location;
+
+
+        destinationPosition = {
+
+            lat: location.lat(),
+
+            lng: location.lng()
+
+        };
+
+
+        destinationName =
+            result.results[0]
+                .formatted_address;
+
+
+        /*
+           入力した名称を表示
+        */
+
+        document.getElementById(
+            "destinationName"
+        ).textContent =
+            value;
+
+
+        document.getElementById(
+            "weatherDestination"
+        ).textContent =
+            value;
+
+
+        /*
+           古い目的地マーカー削除
+        */
+
+        if (
+            destinationMarker
+        ) {
+
+            destinationMarker.setMap(
+                null
+            );
+
+        }
+
+
+        /*
+           新しい目的地マーカー
+        */
+
+        destinationMarker =
+            new AdvancedMarkerElement({
+
+                map: map,
+
+                position:
+                    destinationPosition,
+
+                title:
+                    value
+
+            });
+
+
+        /*
+           新しい旅として距離をリセット
+        */
+
+        initialRouteDistance =
+            null;
+
+
+        lastRouteCalculationPosition =
+            null;
+
+
+        /*
+           ルート計算
+        */
+
+        await calculateRoute();
+
+
+        /*
+           全体画面へ
+        */
+
+        showScreen(0);
+
+
+        document.getElementById(
+            "gpsStatus"
+        ).textContent =
+            "GPS追跡中";
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        document.getElementById(
+            "gpsStatus"
+        ).textContent =
+            "目的地を検索できませんでした";
+
+
+        alert(
+            "目的地を検索できませんでした"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   Enterキーでも検索
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const input =
+            document.getElementById(
+                "destinationInput"
+            );
+
+
+        input.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    searchDestination();
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* =====================================================
    ルート計算
-========================================================= */
+===================================================== */
 
 async function calculateRoute() {
 
     if (
+        !currentPosition ||
         !destinationPosition
     ) {
+
         return;
-    }
 
-
-    /*
-       GPSがまだ取得できていない場合は
-       出発地から計算
-    */
-
-    const origin =
-        currentPosition ||
-        departurePosition;
-
-
-    if (!origin) {
-        return;
     }
 
 
@@ -1565,29 +1697,23 @@ async function calculateRoute() {
             "ROUTE CALCULATING...";
 
 
+        /*
+           現在地 → 目的地
+        */
+
         const request = {
 
-            origin: origin,
+            origin:
+                currentPosition,
 
             destination:
                 destinationPosition,
 
-            travelMode: "DRIVING",
+            travelMode:
+                "DRIVING",
 
             routingPreference:
                 "TRAFFIC_AWARE",
-
-            /*
-               交通情報を取得
-            */
-
-            extraComputations: [
-                "TRAFFIC_ON_POLYLINE"
-            ],
-
-            /*
-               必要なデータ
-            */
 
             fields: [
 
@@ -1597,13 +1723,7 @@ async function calculateRoute() {
 
                 "distanceMeters",
 
-                "durationMillis",
-
-                "staticDurationMillis",
-
-                "speedPaths",
-
-                "routeLabels"
+                "durationMillis"
 
             ]
 
@@ -1637,7 +1757,7 @@ async function calculateRoute() {
 
 
         /*
-           最初のルート距離
+           初回の総距離
         */
 
         if (
@@ -1651,23 +1771,27 @@ async function calculateRoute() {
 
 
         /*
-           再計算位置を保存
+           次回再計算位置
         */
 
-        lastRouteCalculationPosition =
-            currentPosition
-                ? {
-                    lat: currentPosition.lat,
-                    lng: currentPosition.lng
-                }
-                : departurePosition;
+        lastRouteCalculationPosition = {
+
+            lat:
+                currentPosition.lat,
+
+            lng:
+                currentPosition.lng
+
+        };
 
 
         /*
-           交通情報付きルート描画
+           残りルートを青で描画
         */
 
-        drawTrafficRoute(route);
+        drawRemainingRoute(
+            route
+        );
 
 
         /*
@@ -1679,16 +1803,28 @@ async function calculateRoute() {
 
 
         /*
-           出発地も含める
+           出発地点も含める
         */
 
         if (
             routeViewport &&
-            departurePosition
+            currentPosition
         ) {
 
             routeViewport.extend(
-                departurePosition
+                currentPosition
+            );
+
+        }
+
+
+        if (
+            routeViewport &&
+            destinationPosition
+        ) {
+
+            routeViewport.extend(
+                destinationPosition
             );
 
         }
@@ -1698,32 +1834,16 @@ async function calculateRoute() {
            情報更新
         */
 
-        updateRouteInfo(route);
+        updateRouteInfo(
+            route
+        );
 
 
-        /*
-           GPS表示
-        */
+        document.getElementById(
+            "gpsStatus"
+        ).textContent =
+            "GPS追跡中";
 
-        if (currentPosition) {
-
-            document.getElementById(
-                "gpsStatus"
-            ).textContent =
-                "GPS追跡中";
-
-        }
-
-
-        /*
-           ルート全体画面
-        */
-
-        if (currentScreen === 0) {
-
-            showOverview();
-
-        }
 
     } catch (error) {
 
@@ -1743,183 +1863,80 @@ async function calculateRoute() {
 }
 
 
-/* =========================================================
-   交通情報付きルート描画
-========================================================= */
+/* =====================================================
+   残りルート描画
+===================================================== */
 
-function drawTrafficRoute(route) {
-
-    /*
-       前回の交通ルートを削除
-    */
-
-    trafficPolylines.forEach(
-        polyline => {
-
-            polyline.setMap(null);
-
-        }
-    );
-
-
-    trafficPolylines = [];
-
+function drawRemainingRoute(
+    route
+) {
 
     /*
-       speedPathsがない場合
-       →通常の青ルート
+       前のルートを削除
     */
 
     if (
-        !route.speedPaths ||
-        route.speedPaths.length === 0
+        routePolyline
     ) {
 
-        const path =
-            route.path.map(
-                point => ({
-                    lat: point.lat,
-                    lng: point.lng
-                })
-            );
-
-
-        const polyline =
-            new google.maps.Polyline({
-
-                path: path,
-
-                map: map,
-
-                strokeColor: "#1976D2",
-
-                strokeOpacity: 0.95,
-
-                strokeWeight: 8,
-
-                zIndex: 3
-
-            });
-
-
-        trafficPolylines.push(
-            polyline
+        routePolyline.setMap(
+            null
         );
 
-
-        return;
     }
 
 
     /*
-       交通状況ごとに分割
+       青いルート
     */
 
-    route.speedPaths.forEach(
-        speedPath => {
+    const path =
+        route.path.map(
+            point => ({
 
-            if (
-                !speedPath.path ||
-                speedPath.path.length < 2
-            ) {
-                return;
-            }
+                lat:
+                    point.lat,
 
+                lng:
+                    point.lng
 
-            let color =
-                "#1976D2";
-
-
-            /*
-               通常
-            */
-
-            if (
-                speedPath.speed ===
-                "NORMAL"
-            ) {
-
-                color =
-                    "#1976D2";
-
-            }
+            })
+        );
 
 
-            /*
-               やや渋滞
-            */
+    routePolyline =
+        new google.maps.Polyline({
 
-            else if (
-                speedPath.speed ===
-                "SLOW"
-            ) {
+            path:
+                path,
 
-                color =
-                    "#FF9800";
+            map:
+                map,
 
-            }
+            strokeColor:
+                "#1976D2",
 
+            strokeOpacity:
+                0.95,
 
-            /*
-               渋滞
-            */
+            strokeWeight:
+                8,
 
-            else if (
-                speedPath.speed ===
-                "TRAFFIC_JAM"
-            ) {
+            zIndex:
+                3
 
-                color =
-                    "#F44336";
-
-            }
-
-
-            const path =
-                speedPath.path.map(
-                    point => ({
-
-                        lat: point.lat,
-
-                        lng: point.lng
-
-                    })
-                );
-
-
-            const polyline =
-                new google.maps.Polyline({
-
-                    path: path,
-
-                    map: map,
-
-                    strokeColor: color,
-
-                    strokeOpacity: 0.95,
-
-                    strokeWeight: 8,
-
-                    zIndex: 3
-
-                });
-
-
-            trafficPolylines.push(
-                polyline
-            );
-
-        }
-    );
+        });
 
 }
 
 
-/* =========================================================
+/* =====================================================
    ルート情報更新
-========================================================= */
+===================================================== */
 
-function updateRouteInfo(route) {
+function updateRouteInfo(
+    route
+) {
 
     const distanceKm =
         route.distanceMeters /
@@ -1927,10 +1944,12 @@ function updateRouteInfo(route) {
 
 
     /*
-       距離
+       残り距離
     */
 
-    if (distanceKm >= 10) {
+    if (
+        distanceKm >= 10
+    ) {
 
         document.getElementById(
             "remainingDistance"
@@ -1947,14 +1966,8 @@ function updateRouteInfo(route) {
     }
 
 
-    document.getElementById(
-        "remainingDistanceSub"
-    ).textContent =
-        "Remaining distance";
-
-
     /*
-       時間
+       残り時間
     */
 
     const minutes =
@@ -1967,7 +1980,9 @@ function updateRouteInfo(route) {
     document.getElementById(
         "remainingTime"
     ).textContent =
-        formatDuration(minutes);
+        formatDuration(
+            minutes
+        );
 
 
     /*
@@ -1984,11 +1999,13 @@ function updateRouteInfo(route) {
     document.getElementById(
         "eta"
     ).textContent =
-        formatTime(eta);
+        formatTime(
+            eta
+        );
 
 
     /*
-       進捗
+       進捗率
     */
 
     let progress = 0;
@@ -2040,15 +2057,17 @@ function updateRouteInfo(route) {
 }
 
 
-/* =========================================================
-   時間表示
-========================================================= */
+/* =====================================================
+   時間フォーマット
+===================================================== */
 
 function formatDuration(
     minutes
 ) {
 
-    if (minutes < 60) {
+    if (
+        minutes < 60
+    ) {
 
         return `${minutes}分`;
 
@@ -2070,30 +2089,39 @@ function formatDuration(
 }
 
 
-/* =========================================================
-   時刻表示
-========================================================= */
+/* =====================================================
+   時刻フォーマット
+===================================================== */
 
-function formatTime(date) {
+function formatTime(
+    date
+) {
 
     return date.toLocaleTimeString(
         "ja-JP",
         {
-            hour: "2-digit",
-            minute: "2-digit"
+
+            hour:
+                "2-digit",
+
+            minute:
+                "2-digit"
+
         }
     );
 
 }
 
 
-/* =========================================================
-   画面切り替え
-========================================================= */
+/* =====================================================
+   画面タイマー
+===================================================== */
 
 function startScreenTimer() {
 
-    if (screenTimer) {
+    if (
+        screenTimer
+    ) {
 
         clearInterval(
             screenTimer
@@ -2108,6 +2136,7 @@ function startScreenTimer() {
             () => {
 
                 currentScreen++;
+
 
                 if (
                     currentScreen > 2
@@ -2131,9 +2160,9 @@ function startScreenTimer() {
 }
 
 
-/* =========================================================
+/* =====================================================
    画面表示
-========================================================= */
+===================================================== */
 
 function showScreen(
     screen
@@ -2144,7 +2173,7 @@ function showScreen(
 
 
     /*
-       天気画面を一旦消す
+       天気画面を非表示
     */
 
     document
@@ -2179,11 +2208,12 @@ function showScreen(
 
 
     /*
-       画面1
-       全体ルート
+       全体
     */
 
-    if (screen === 0) {
+    if (
+        screen === 0
+    ) {
 
         showOverview();
 
@@ -2191,11 +2221,12 @@ function showScreen(
 
 
     /*
-       画面2
        現在位置
     */
 
-    if (screen === 1) {
+    if (
+        screen === 1
+    ) {
 
         showCurrentPosition();
 
@@ -2203,11 +2234,12 @@ function showScreen(
 
 
     /*
-       画面3
        天気
     */
 
-    if (screen === 2) {
+    if (
+        screen === 2
+    ) {
 
         document
             .getElementById(
@@ -2225,18 +2257,24 @@ function showScreen(
 }
 
 
-/* =========================================================
-   全体ルート表示
-========================================================= */
+/* =====================================================
+   全体ルート画面
+===================================================== */
 
 function showOverview() {
 
-    if (!map) {
+    if (
+        !map
+    ) {
+
         return;
+
     }
 
 
-    if (routeViewport) {
+    if (
+        routeViewport
+    ) {
 
         map.fitBounds(
             routeViewport,
@@ -2248,13 +2286,14 @@ function showOverview() {
 }
 
 
-/* =========================================================
-   現在位置画面
-========================================================= */
+/* =====================================================
+   現在位置拡大
+===================================================== */
 
 function showCurrentPosition() {
 
-    currentScreen = 1;
+    currentScreen =
+        1;
 
 
     document
@@ -2265,10 +2304,6 @@ function showCurrentPosition() {
             "visible"
         );
 
-
-    /*
-       インジケーター
-    */
 
     for (
         let i = 0;
@@ -2288,8 +2323,12 @@ function showCurrentPosition() {
     }
 
 
-    if (!currentPosition) {
+    if (
+        !currentPosition
+    ) {
+
         return;
+
     }
 
 
@@ -2298,25 +2337,25 @@ function showCurrentPosition() {
     );
 
 
-    /*
-       現在位置を拡大
-    */
-
-    map.setZoom(17);
+    map.setZoom(
+        17
+    );
 
 }
 
 
-/* =========================================================
-   天気取得
-========================================================= */
+/* =====================================================
+   天気
+===================================================== */
 
 async function loadWeather() {
 
     if (
         !destinationPosition
     ) {
+
         return;
+
     }
 
 
@@ -2339,7 +2378,9 @@ async function loadWeather() {
 
 
         const response =
-            await fetch(url);
+            await fetch(
+                url
+            );
 
 
         const data =
@@ -2349,10 +2390,6 @@ async function loadWeather() {
         const current =
             data.current;
 
-
-        /*
-           天気コード
-        */
 
         const weather =
             getWeatherInfo(
@@ -2402,23 +2439,12 @@ async function loadWeather() {
             )} km/h`;
 
 
-        const updated =
-            new Date();
-
-
         document.getElementById(
             "weatherUpdatedSmall"
         ).textContent =
-            formatTime(updated);
-
-
-        document.getElementById(
-            "weatherUpdated"
-        ).textContent =
-            "Weather data: Open-Meteo";
-
-
-        weatherLoaded = true;
+            formatTime(
+                new Date()
+            );
 
 
     } catch (error) {
@@ -2439,19 +2465,24 @@ async function loadWeather() {
 }
 
 
-/* =========================================================
+/* =====================================================
    天気コード
-========================================================= */
+===================================================== */
 
 function getWeatherInfo(
     code
 ) {
 
-    if (code === 0) {
+    if (
+        code === 0
+    ) {
 
         return {
+
             icon: "☀️",
+
             text: "快晴"
+
         };
 
     }
@@ -2463,18 +2494,26 @@ function getWeatherInfo(
     ) {
 
         return {
+
             icon: "🌤️",
+
             text: "晴れ・一部曇り"
+
         };
 
     }
 
 
-    if (code === 3) {
+    if (
+        code === 3
+    ) {
 
         return {
+
             icon: "☁️",
+
             text: "曇り"
+
         };
 
     }
@@ -2486,8 +2525,11 @@ function getWeatherInfo(
     ) {
 
         return {
+
             icon: "🌫️",
+
             text: "霧"
+
         };
 
     }
@@ -2499,8 +2541,11 @@ function getWeatherInfo(
     ) {
 
         return {
+
             icon: "🌧️",
+
             text: "雨"
+
         };
 
     }
@@ -2512,8 +2557,11 @@ function getWeatherInfo(
     ) {
 
         return {
+
             icon: "❄️",
+
             text: "雪"
+
         };
 
     }
@@ -2525,8 +2573,11 @@ function getWeatherInfo(
     ) {
 
         return {
+
             icon: "🌦️",
+
             text: "にわか雨"
+
         };
 
     }
@@ -2538,8 +2589,11 @@ function getWeatherInfo(
     ) {
 
         return {
+
             icon: "⛈️",
+
             text: "雷雨"
+
         };
 
     }
@@ -2556,17 +2610,17 @@ function getWeatherInfo(
 }
 
 
-/* =========================================================
-   自動ルート再計算
-========================================================= */
+/* =====================================================
+   30秒ごとの自動ルート更新
+===================================================== */
 
 setInterval(
 
     () => {
 
         if (
-            destinationPosition &&
-            currentPosition
+            currentPosition &&
+            destinationPosition
         ) {
 
             calculateRoute();
@@ -2580,9 +2634,9 @@ setInterval(
 );
 
 
-/* =========================================================
-   Google Maps 読み込み後
-========================================================= */
+/* =====================================================
+   Google Maps callback
+===================================================== */
 
 window.initMap =
     initMap;
@@ -2591,15 +2645,17 @@ window.initMap =
 
 
 <!-- =====================================================
-     Google Maps
+     Google Maps API
+
+     YOUR_API_KEY を自分のAPIキーに変更
 ====================================================== -->
 
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbRU5gNHyLMG8Givp5ZrblOzPaucztPMM&v=weekly&callback=initMap"
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&v=weekly&callback=initMap"
     async
     defer>
 </script>
 
-
 </body>
 </html>
+```
